@@ -18,7 +18,10 @@ public class Quant {
     private Long id;
 
     @Column
-    private String quant_type;
+    private String quantType;
+
+    @Column
+    private String coinTicker;
 
     @Column
     private LocalDateTime regdate;

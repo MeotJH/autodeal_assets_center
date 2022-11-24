@@ -2,6 +2,8 @@ package auto_deal.center.telegram.service;
 
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.telegram.service.TelegramService;
+import auto_deal.center.user.service.UserService;
+import auto_deal.center.user.service.UserServiceImpl;
 import com.pengrad.telegrambot.Callback;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -22,15 +24,17 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@Slf4j
 public class TelegramServiceImpl implements TelegramService {
 
     TelegramBot telegramBot;
     TelegramBotMessage telegramBotMessage;
 
-    public TelegramServiceImpl(){
+    private final UserService userService;
+
+    public TelegramServiceImpl(UserService userService){
         this.telegramBot = new TelegramBot("5692669704:AAH4N_20QLZHskRN_cnDXDSWaFqHTe1y3VA");
         this.activeListener();
+        this.userService = userService;
     }
 
     //리스너를 등록해 놓는 메소드
@@ -54,6 +58,9 @@ public class TelegramServiceImpl implements TelegramService {
         for(Update each: updates){
             Long chatId = each.message().from().id();
             String text = each.message().text();
+            
+            //DB도입 시작부분
+            userService.Process(chatId,text);
 
             // 봇 커맨드에 맞는 답변을 가져온다
             telegramBotMessage = Arrays.stream(TelegramBotMessage.values())
