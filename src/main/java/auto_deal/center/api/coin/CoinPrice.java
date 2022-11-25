@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CoinPrice {
 
-    List<CoinApiRslt> getPrices();
+    CoinApiRslt getPrices();
 }

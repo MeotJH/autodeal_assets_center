@@ -33,6 +33,9 @@ dependencies {
 
 	// 텔레그램LIB
 	implementation 'com.github.pengrad:java-telegram-bot-api:6.2.0'
+
+	// json객체
+	implementation group: 'org.json', name: 'json', version: '20220924'
 }
 
 tasks.named('test') {
