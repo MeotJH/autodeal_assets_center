@@ -1,7 +1,6 @@
 package auto_deal.center.coin.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,21 +9,27 @@ import javax.persistence.Table;
 
 @Entity
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name="TB_COIN")
 public class Coin {
 
     @Id
     @GeneratedValue
     private Long id;
-    private String kor_name;
-
-    private String eng_name;
 
     private String ticker;
-
-    public void setCoinOne(String eng_name, String ticker){
-        this.eng_name = eng_name;
-        this.ticker = ticker;
-    }
+    private String opening_price;
+    private String closing_price;
+    private String min_price;
+    private String max_price;
+    private String units_traded;
+    private String acc_trade_value;
+    private String prev_closing_price;
+    private String units_traded_24H;
+    private String acc_trade_value_24H;
+    private String fluctate_24H;
+    private String fluctate_rate_24H;
 
 }

@@ -15,27 +15,24 @@ public class CoinApiRslt {
     private String status;
 
     private Map<String, Coin> data;
-
     @Setter
     private String date;
-
-
 
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Coin {
-        public String opening_price;
-        public String closing_price;
-        public String min_price;
-        public String max_price;
-        public String units_traded;
-        public String acc_trade_value;
-        public String prev_closing_price;
-        public String units_traded_24H;
-        public String acc_trade_value_24H;
-        public String fluctate_24H;
-        public String fluctate_rate_24H;
+        private String opening_price;
+        private String closing_price;
+        private String min_price;
+        private String max_price;
+        private String units_traded;
+        private String acc_trade_value;
+        private String prev_closing_price;
+        private String units_traded_24H;
+        private String acc_trade_value_24H;
+        private String fluctate_24H;
+        private String fluctate_rate_24H;
     }
 
 }

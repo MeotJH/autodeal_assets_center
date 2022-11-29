@@ -14,7 +14,7 @@ public class InitCoinService {
     public void init(){
 
         Coin coin = new Coin();
-        coin.setCoinOne("BitCoin", "BTC");
+        //coin.setCoinOne("BitCoin", "BTC");
         coinRepository.save(coin);
         coinRepository.flush();
     }

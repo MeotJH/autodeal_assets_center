@@ -33,7 +33,6 @@ class InitCoinServiceTest {
         coinRepository.flush();
 
         //then
-        coin.setCoinOne("BitCoin","BTC");
         Coin coinOne = coinRepository.findOne(Example.of(coin)).get();
         Assertions.assertThat( coinOne.getTicker() ).isEqualTo( "BTC" );
     }
