@@ -10,14 +10,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Service("quartz")
+@Service("CoinDataScheduler")
 @RequiredArgsConstructor
 public class CoinDataScheduler {
 
     private final CoinRdbSyncManager coinRdbSyncManager;
 
-    //@Scheduled(cron="10*****")
-    private void syncDataPerHour(){
+    // 서버 기동된 후 1초에 처음 시작하고 30분에 한번
+    @Scheduled(fixedDelay = 30*60*1000, initialDelay = 1000)
+    public void syncDataPerHour(){
         coinRdbSyncManager.setCoinToDb();
     }
 }

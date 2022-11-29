@@ -17,7 +17,7 @@ class CoinPriceBithumbTest {
     private CoinPrice coinPrice;
 
     @Test
-    @DisplayName( "코인 현재가들 가져와야 한다")
+    @DisplayName("코인 현재가들 가져와야 한다")
     void getPrice(){
         //given
         CoinApiRslt prices = coinPrice.getPrices();
@@ -26,7 +26,7 @@ class CoinPriceBithumbTest {
         boolean isBTC = prices.getData().containsKey("BTC");
 
         //then
-        Assertions.assertThat( isBTC).isEqualTo( true );
+        Assertions.assertThat(isBTC).isEqualTo( true );
     }
     
 }

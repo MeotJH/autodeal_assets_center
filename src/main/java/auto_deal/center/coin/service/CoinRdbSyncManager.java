@@ -41,5 +41,6 @@ public class CoinRdbSyncManager {
             coinRepository.save(coin);
 
         });
+        coinRepository.flush();
     }
 }

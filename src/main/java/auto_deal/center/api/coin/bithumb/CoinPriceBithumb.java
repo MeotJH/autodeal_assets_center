@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
+// 빗썸 API사용하기 위한 구현체
 @Service
 @Slf4j
 public class CoinPriceBithumb implements CoinPrice {
@@ -24,6 +25,7 @@ public class CoinPriceBithumb implements CoinPrice {
         restTemplate = new RestTemplate();
     }
 
+    // 현재 코인의 모든 값을 받아온다.
     @Override
     public CoinApiRslt getPrices() {
         String nowPricePath = "/public/ticker/ALL_KRW";
@@ -39,6 +41,7 @@ public class CoinPriceBithumb implements CoinPrice {
         return coinApiRslt;
     }
 
+    // Map으로 리턴받은 결과값을 자료객체로 변환한다.
     private CoinApiRslt makeObjToCoin(Object response) {
         ObjectMapper mapper = new ObjectMapper();
 

@@ -7,6 +7,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean Process(Long chatId, String text) {
-        return null;
+        return Boolean.TRUE;
     }
 }
