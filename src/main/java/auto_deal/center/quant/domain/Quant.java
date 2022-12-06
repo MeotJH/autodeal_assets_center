@@ -1,15 +1,16 @@
 package auto_deal.center.quant.domain;
 
 import auto_deal.center.user.domain.Users;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="TB_QUANT")
 public class Quant {
 
@@ -27,6 +28,7 @@ public class Quant {
     private LocalDateTime regdate;
 
     @ManyToOne
+    @Setter
     @JoinColumn(name="USER_ID")
     private Users users;
 
