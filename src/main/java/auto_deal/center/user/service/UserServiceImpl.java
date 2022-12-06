@@ -29,11 +29,33 @@ public class UserServiceImpl implements UserService {
         //text에 상승장, 비트코인 과 같은 문구가 옴
     }
 
+    // 이 메소드에서 연관관계 주인이 왜 중요한지 알아냈다.
     private boolean saveUserTalk(Long chatId, String text){
+        // one을 저장하고
+        Users userOne = Users.builder().chatId(chatId).regDate(LocalDateTime.now()).build();
+        userRepository.save(userOne);
+        
+        // fk의 주인인 Many를 저장하면 자동으로
+        Quant quantOne = getQuant(text);
+        quantOne.setUser(userOne);
+        quantRepository.save(quantOne);
+
+        return Boolean.TRUE;
+    }
+    
+    // 연관관계 주인의 중요성을 이해하지 못했을때의 코드
+    private boolean saveUserTalkOld(Long chatId, String text){
+
+        Quant quantOne = getQuant(text);
+        quantRepository.save(quantOne);
 
         Users userOne = Users.builder().chatId(chatId).regDate(LocalDateTime.now()).build();
-        userOne.addQuant(getQuant(text));
+        userOne.addQuant(quantOne);
         userRepository.save(userOne);
+
+        quantOne.setUser(userOne);
+        quantRepository.save(quantOne);
+
         return Boolean.TRUE;
     }
 
@@ -45,7 +67,6 @@ public class UserServiceImpl implements UserService {
                 quantType = each.name();
             }
         }
-        Quant build = Quant.builder().quantType(quantType.toString()).regdate(LocalDateTime.now()).build();
-        return quantRepository.save(build);
+        return Quant.builder().quantType(quantType.toString()).regdate(LocalDateTime.now()).build();
     }
 }

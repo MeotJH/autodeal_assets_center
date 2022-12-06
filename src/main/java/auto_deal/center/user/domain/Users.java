@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Users {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="USER_ID")
     private Long id;
 
