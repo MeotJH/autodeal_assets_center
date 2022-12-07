@@ -38,4 +38,8 @@ public class Users {
             quant.setUsers(this);
         }
     }
+
+    public void changRegDate(){
+        this.regDate = LocalDateTime.now();
+    }
 }
