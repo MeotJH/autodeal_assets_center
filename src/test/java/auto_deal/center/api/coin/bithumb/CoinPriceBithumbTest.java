@@ -45,7 +45,6 @@ class CoinPriceBithumbTest {
         String todayTimestampStr = prices.getData().get(prices.getData().size()-1).get(0);
         Long todayTimestamp = Long.parseLong(todayTimestampStr);
         LocalDateTime today = LocalDateTime.ofInstant(Instant.ofEpochMilli(todayTimestamp), TimeZone.getDefault().toZoneId());
-
         //then
         Assertions.assertThat(today.getDayOfWeek()).isEqualTo( LocalDateTime.now().getDayOfWeek() );
     }
