@@ -27,7 +27,7 @@ public class Quant {
     @Column
     private LocalDateTime regdate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Setter
     @JoinColumn(name="USER_ID")
     private Users users;

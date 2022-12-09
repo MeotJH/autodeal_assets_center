@@ -1,6 +1,7 @@
 package auto_deal.center.user.domain;
 
 import auto_deal.center.quant.domain.Quant;
+import auto_deal.center.talk.domain.Talk;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,10 @@ public class Users {
     @Builder.Default
     private List<Quant> quants = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "TALK_ID")
+    private Talk talk;
+
     public void addQuant(Quant quant){
         this.quants.add(quant);
         
@@ -41,5 +46,9 @@ public class Users {
 
     public void changRegDate(){
         this.regDate = LocalDateTime.now();
+    }
+
+    public void changeTalk(Talk talk){
+        this.talk = talk;
     }
 }
