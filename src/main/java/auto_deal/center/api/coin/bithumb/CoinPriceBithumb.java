@@ -2,6 +2,7 @@ package auto_deal.center.api.coin.bithumb;
 
 import auto_deal.center.api.coin.CoinPrice;
 import auto_deal.center.api.coin.model.CoinApiRslt;
+import auto_deal.center.api.coin.model.CoinOhlcvRslt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -39,6 +40,17 @@ public class CoinPriceBithumb implements CoinPrice {
         log.info("CoinPriceBithumb.getPrice :::::::::: coinApiRslt ::::::::::::: {} ", coinApiRslt.toString());
 
         return coinApiRslt;
+    }
+
+    @Override
+    public CoinOhlcvRslt getOhlcv(String ticker) {
+        String nowPricePath = "/public/candlestick/"+ticker+"_KRW/24h";
+        String coinNowPriceUrl =  bithumbUrl + nowPricePath;
+
+        HttpHeaders headers  = new HttpHeaders();
+        HttpEntity entity = new HttpEntity<>(headers);
+        ResponseEntity<CoinOhlcvRslt> response = restTemplate.exchange(coinNowPriceUrl, HttpMethod.GET, entity, CoinOhlcvRslt.class);
+        return response.getBody();
     }
 
     // Map으로 리턴받은 결과값을 자료객체로 변환한다.
