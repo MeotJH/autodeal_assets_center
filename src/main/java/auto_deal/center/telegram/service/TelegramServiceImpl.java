@@ -56,6 +56,7 @@ public class TelegramServiceImpl implements TelegramService {
         // 루프를 돌며 대화에 맞는 답변을 한다.
         List<Update> updates = updatesResponse.updates();
         for(Update each: updates){
+
             Long chatId = each.message().from().id();
             String text = each.message().text();
             

@@ -24,7 +24,7 @@ class CoinRdbSyncManagerTest {
     @DisplayName( "통신해 가져와 Db에 넣은값 테스트한다.")
     void setCoinToDbTest(){
         //given
-        coinRdbSyncManager.setCoinToDb();
+        coinRdbSyncManager.updateCoinToDb();
         String coinTicker = "BTC";
 
         //when
@@ -33,6 +33,21 @@ class CoinRdbSyncManagerTest {
 
         //then
         Assertions.assertThat(one.getTicker()).isEqualTo(coinTicker);
+    }
+
+    @Test
+    @DisplayName( "코인 이름 세팅 테스트 한다.")
+    void setCoinNameInitTest(){
+        //given
+        coinRdbSyncManager.initCoinName();
+        String coinTicker = "BTC";
+
+        //when
+        Coin one = coinRepository.findCoinByTicker(coinTicker);
+
+        //then
+        String rsltName = "비트코인";
+        Assertions.assertThat(one.getKorea()).isEqualTo(rsltName);
     }
 
 }

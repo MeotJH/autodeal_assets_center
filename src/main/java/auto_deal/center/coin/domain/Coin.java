@@ -1,6 +1,7 @@
 package auto_deal.center.coin.domain;
 
 import auto_deal.center.api.coin.model.CoinApiRslt;
+import auto_deal.center.coin.model.CoinInitModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,8 @@ public class Coin {
     private Long id;
 
     private String ticker;
+    private String english;
+    private String korea;
     private String opening_price;
     private String closing_price;
     private String min_price;
@@ -43,6 +46,12 @@ public class Coin {
         this.fluctate_24H = coin.getFluctate_24H();
         this.fluctate_rate_24H = coin.getFluctate_rate_24H();
 
+        return this;
+    }
+
+    public Coin updateCoinName(CoinInitModel coin){
+        this.korea = coin.getKorea();
+        this.english = coin.getEnglish();
         return this;
     }
 

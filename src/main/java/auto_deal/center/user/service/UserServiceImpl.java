@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
     // 이 메소드에서 연관관계 주인이 왜 중요한지 알아냈다.
     private boolean saveUserTalk(Long chatId, String text){
         Talk talk = talkService.saveTalk(text);
-        // TODO 저장 전에 유저 존재하는지 확인하는 코드
         if( isUserExist(chatId) ){
             saveUserRequst(chatId, talk);
         }else{

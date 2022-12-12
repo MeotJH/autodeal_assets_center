@@ -15,4 +15,6 @@ public interface CoinPrice {
     CoinOhlcvRslt getOhlcv(String ticker);
 
     JSONObject getNowPrices();
+
+    JSONObject getNowPrice(String ticker);
 }
