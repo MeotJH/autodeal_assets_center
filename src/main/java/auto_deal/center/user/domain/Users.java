@@ -23,17 +23,15 @@ public class Users {
 
     private Long chatId;
 
-    private LocalDateTime alarmTime;
-
     private LocalDateTime regDate;
 
     @OneToMany(mappedBy = "users")
     @Builder.Default
     private List<Quant> quants = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "TALK_ID")
-    private Talk talk;
+    @OneToMany(mappedBy = "users")
+    @Builder.Default
+    private List<Talk> talks = new ArrayList<>();
 
     public void addQuant(Quant quant){
         this.quants.add(quant);
@@ -44,11 +42,16 @@ public class Users {
         }
     }
 
-    public void changRegDate(){
-        this.regDate = LocalDateTime.now();
+    public void addTalk(Talk talk){
+        this.talks.add(talk);
+
+        // 무한루프에 빠지지 않도록 체크
+        if(talk.getUsers() != this){
+            talk.setUsers(this);
+        }
     }
 
-    public void changeTalk(Talk talk){
-        this.talk = talk;
+    public void changRegDate(){
+        this.regDate = LocalDateTime.now();
     }
 }

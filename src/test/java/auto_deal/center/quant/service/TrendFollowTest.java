@@ -1,5 +1,6 @@
 package auto_deal.center.quant.service;
 
+import auto_deal.center.quant.dto.QuantModel;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,10 +22,10 @@ class TrendFollowTest {
         String bitcoinTicker = "BTC";
 
         //when
-        Boolean isBuy = trendFollow.get(bitcoinTicker);
+        QuantModel quantModel = trendFollow.get(bitcoinTicker);
 
         //then
-        Assertions.assertThat(isBuy).isNotNull();
+        Assertions.assertThat(quantModel.toRsltStr()).isNotNull();
     }
 
 }

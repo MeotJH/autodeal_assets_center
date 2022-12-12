@@ -2,10 +2,11 @@ package auto_deal.center.quant.service;
 
 import auto_deal.center.api.coin.CoinPrice;
 import auto_deal.center.api.coin.model.CoinOhlcvRslt;
+import auto_deal.center.quant.dto.QuantModel;
+import auto_deal.center.quant.dto.TrendFollowModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,21 +14,24 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TrendFollow {
+public class TrendFollow implements QuantType {
 
     private final CoinPrice coinPrice;
 
-    public Boolean get(String ticker){
+    @Override
+    public QuantModel get(String ticker){
         Boolean isBuy = Boolean.FALSE;
-        CoinOhlcvRslt rslt = coinPrice.getOhlcv("BTC");
+        CoinOhlcvRslt rslt = coinPrice.getOhlcv(ticker);
+        QuantModel model = null;
 
         if(isStatusOk(rslt)){
             List<List<String>> priceHistory = rslt.getData();
             Long Price = getThreeMonthTrendFollowPrice(priceHistory);
-            isBuy = defineBuyOrNot(ticker, Price);
+            model = defineBuyOrNot(ticker, Price);
+
         }
 
-        return isBuy;
+        return model;
     }
 
     private boolean isStatusOk(CoinOhlcvRslt rslt) {
@@ -51,7 +55,7 @@ public class TrendFollow {
     }
 
     @NotNull
-    private Boolean defineBuyOrNot(String ticker, Long price) {
+    private QuantModel defineBuyOrNot(String ticker, Long price) {
         Boolean isBuy;
         long nowPrice = coinPrice
                 .getNowPrice(ticker)
@@ -69,7 +73,8 @@ public class TrendFollow {
         }else{
             isBuy = Boolean.FALSE;
         }
-        return isBuy;
+        
+        return TrendFollowModel.builder().ticker(ticker).targetPrice(price).nowPrice(nowPrice).isBuy(isBuy).build();
     }
 
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CoinRepository extends JpaRepository<Coin, Long> {
     Coin findCoinByTicker(String ticker);
+    Coin findCoinByKorea(String korea);
 }

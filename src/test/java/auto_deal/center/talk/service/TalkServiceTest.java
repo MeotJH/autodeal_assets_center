@@ -32,9 +32,11 @@ class TalkServiceTest {
     void testInserTalk(){
         //given
         String text = "토크토크";
+        Long chatid = 123123L;
 
         //when
-        Talk talkSaved = talkService.saveTalk(text);
+        Users saved = userRepository.save(Users.builder().chatId(chatid).build());
+        Talk talkSaved = talkService.saveTalk(text,saved);
         Talk talk = talkRepository.findById(talkSaved.getId()).orElseGet( () -> Talk.builder().content("토크토크아님").build());
 
         //then
@@ -47,18 +49,16 @@ class TalkServiceTest {
     void saveTalkAfterUserTest(){
         //given
         String text = "토크토크";
-        Talk talkSaved = talkService.saveTalk(text);
+        Long chatid = 123123L;
+        Users saved = userRepository.save(Users.builder().chatId(chatid).build());
+        Talk talkSaved = talkService.saveTalk(text,saved);
         Talk talk = talkRepository.findById(talkSaved.getId()).get();
 
-        Long chatId = 12312L;
-        Users usersOne = Users.builder().chatId(chatId).talk(talk).build();
-
         //when
-        Users userSaved = userRepository.save(usersOne);
-        Users users = userRepository.findById(userSaved.getId()).get();
+        Users users = userRepository.findById(saved.getId()).get();
 
         //then
-        Assertions.assertThat(users.getTalk().getContent()).isEqualTo(text);
+        Assertions.assertThat(users.getTalks().get(0).getContent()).isEqualTo(text);
     }
 
 

@@ -21,8 +21,18 @@ public class Talk {
 
     private String content;
 
-    @OneToOne(mappedBy = "talk")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Setter
+    @JoinColumn(name="USER_ID")
     private Users users;
 
     private LocalDateTime regDate;
+
+    public void setUser(Users users){
+        this.users = users;
+
+        if(!users.getTalks().contains(this)){
+            users.getTalks().add(this);
+        }
+    }
 }

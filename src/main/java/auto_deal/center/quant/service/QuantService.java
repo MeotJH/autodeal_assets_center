@@ -13,5 +13,5 @@ public interface QuantService {
 
     String getBullMarketInfo(List<BullInfo> bullInfos);
 
-    void saveQuantByEnum(String text, Users user);
+    Quant saveQuantByEnum(String text, Users user);
 }

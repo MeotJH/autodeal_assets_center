@@ -51,7 +51,7 @@ class UserServiceImplTest {
         Users userOne = userRepository.findUserOneByChatId(chatId);
 
         //then
-        Assertions.assertThat(userOne.getTalk().getContent()).isEqualTo(text);
+        Assertions.assertThat(userOne.getTalks().get(0).getContent()).isEqualTo(text);
 
     }
 
