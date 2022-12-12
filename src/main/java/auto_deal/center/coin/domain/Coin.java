@@ -1,5 +1,6 @@
 package auto_deal.center.coin.domain;
 
+import auto_deal.center.api.coin.model.CoinApiRslt;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,5 +29,21 @@ public class Coin {
     private String acc_trade_value_24H;
     private String fluctate_24H;
     private String fluctate_rate_24H;
+
+    public Coin updateCoinData(CoinApiRslt.Coin coin){
+        this.opening_price = coin.getOpening_price();
+        this.closing_price = coin.getClosing_price();
+        this.min_price = coin.getMin_price();
+        this.max_price = coin.getMax_price();
+        this.units_traded = coin.getUnits_traded();
+        this.acc_trade_value = coin.getAcc_trade_value();
+        this.prev_closing_price = coin.getPrev_closing_price();
+        this.units_traded_24H = coin.getUnits_traded_24H();
+        this.acc_trade_value_24H = coin.getAcc_trade_value_24H();
+        this.fluctate_24H = coin.getFluctate_24H();
+        this.fluctate_rate_24H = coin.getFluctate_rate_24H();
+
+        return this;
+    }
 
 }

@@ -9,16 +9,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional(rollbackFor = Exception.class)
 class TalkServiceTest {
 
     @Autowired
@@ -32,13 +28,14 @@ class TalkServiceTest {
 
     @Test
     @DisplayName( "talk 넣어지는지 테스트한다.")
+    @Transactional(rollbackFor = Exception.class)
     void testInserTalk(){
         //given
         String text = "토크토크";
 
         //when
-        talkService.saveTalk(text);
-        Talk talk = talkRepository.findById(1L).get();
+        Talk talkSaved = talkService.saveTalk(text);
+        Talk talk = talkRepository.findById(talkSaved.getId()).orElseGet( () -> Talk.builder().content("토크토크아님").build());
 
         //then
         Assertions.assertThat(talk.getContent()).isEqualTo(text);
@@ -46,18 +43,19 @@ class TalkServiceTest {
 
     @Test
     @DisplayName( "save한 talk를 user에 넣어지는지 테스트한다.")
+    @Transactional(rollbackFor = Exception.class)
     void saveTalkAfterUserTest(){
         //given
         String text = "토크토크";
-        talkService.saveTalk(text);
-        Talk talk = talkRepository.findById(1L).get();
+        Talk talkSaved = talkService.saveTalk(text);
+        Talk talk = talkRepository.findById(talkSaved.getId()).get();
 
         Long chatId = 12312L;
         Users usersOne = Users.builder().chatId(chatId).talk(talk).build();
 
         //when
-        userRepository.save(usersOne);
-        Users users = userRepository.findById(1L).get();
+        Users userSaved = userRepository.save(usersOne);
+        Users users = userRepository.findById(userSaved.getId()).get();
 
         //then
         Assertions.assertThat(users.getTalk().getContent()).isEqualTo(text);
