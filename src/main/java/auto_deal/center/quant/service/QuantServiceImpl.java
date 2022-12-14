@@ -3,11 +3,8 @@ package auto_deal.center.quant.service;
 import auto_deal.center.quant.domain.Quant;
 import auto_deal.center.quant.dto.BullInfo;
 import auto_deal.center.quant.repository.QuantRepository;
-import auto_deal.center.talk.domain.Talk;
 import auto_deal.center.talk.repository.TalkRepository;
-import auto_deal.center.telegram.message.TelegramBotBullMessage;
 import auto_deal.center.telegram.message.TelegramBotMessage;
-import auto_deal.center.trade_detail.domain.TradeDetail;
 import auto_deal.center.trade_detail.service.TradeDetailService;
 import auto_deal.center.user.domain.Users;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

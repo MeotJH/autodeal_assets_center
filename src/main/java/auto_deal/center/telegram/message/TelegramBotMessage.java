@@ -19,7 +19,9 @@ public enum TelegramBotMessage {
 
     TREND_FOLLOW("추세 투자법 기능입니다. \n" +
             "원하는 코인명을 풀네임으로 입력해 주세요 \n" +
-            "예) 비트코인, 이더리움...", "/trend", "/추세","trendFollow"),
+            "예) 비트코인, 이더리움... \n" +
+            "해당 투자기능 상세 사용법 \n" +
+            " https://meotlog.tistory.com/69 ", "/trend", "/추세","trendFollow"),
 
     VOLA_BREAK("변동성 돌파 전략 기능입니다. \n" +
             "원하는 코인명을 풀네임으로 입력해주세요 \n" +

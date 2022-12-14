@@ -12,13 +12,13 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Map;
 
 // 빗썸 API사용하기 위한 구현체
+// TODO 라이브러리로 만들어서 openSource로 깃허브만들고 MavenCentral에 배포하기
 @Service
 @Slf4j
 public class CoinPriceBithumb implements CoinPrice {

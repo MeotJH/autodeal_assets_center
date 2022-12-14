@@ -5,8 +5,7 @@ import auto_deal.center.user.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.*;
-import com.pengrad.telegrambot.model.request.ForceReply;
-import com.pengrad.telegrambot.model.request.ParseMode;
+import com.pengrad.telegrambot.model.request.*;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
@@ -14,6 +13,7 @@ import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +49,8 @@ public class TelegramServiceImpl implements TelegramService {
     }
 
     // 봇에게 보낸 대화에 맞는 답변을 보낸다.
-    private void processUpdates(){
+    @Transactional( rollbackFor = Exception.class )
+    protected void processUpdates(){
         // 봇에게 보낸 대화들을 가져온다
         GetUpdates getUpdates = new GetUpdates().limit(100).offset(0).timeout(0);
         GetUpdatesResponse updatesResponse = telegramBot.execute(getUpdates);
@@ -58,11 +59,12 @@ public class TelegramServiceImpl implements TelegramService {
         List<Update> updates = updatesResponse.updates();
         for(Update each: updates){
 
-            Long chatId = each.message().from().id();
-            String text = each.message().text();
+            Long chatId = 0L;
 
             String rsltMsg = null;
             try{
+                chatId = each.message().from().id();
+                String text = each.message().text();
                 //DB도입 시작부분
                 userService.Process(chatId, text);
                 rsltMsg = returnMessage.process(chatId,text);
@@ -70,7 +72,6 @@ public class TelegramServiceImpl implements TelegramService {
             }catch(Exception e){
                 rsltMsg = returnMessage.error();
             }finally {
-
                 // 메세지를 보낸다.
                 sendMessage(chatId, rsltMsg);
             }
