@@ -1,6 +1,8 @@
 package auto_deal.center.telegram.service;
 
+import auto_deal.center.cmm.model.CommonModel;
 import auto_deal.center.telegram.message.TelegramBotMessage;
+import auto_deal.center.trade_detail.model.TradeDetailTalk;
 import auto_deal.center.user.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -66,10 +68,12 @@ public class TelegramServiceImpl implements TelegramService {
                 chatId = each.message().from().id();
                 String text = each.message().text();
                 //DB도입 시작부분
-                userService.Process(chatId, text);
-                rsltMsg = returnMessage.process(chatId,text);
+                CommonModel processed = userService.Process(chatId, text);
+                rsltMsg = returnMessage.process(processed,text);
 
             }catch(Exception e){
+                e.printStackTrace();
+                log.info(e.getMessage());
                 rsltMsg = returnMessage.error();
             }finally {
                 // 메세지를 보낸다.

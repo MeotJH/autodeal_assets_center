@@ -1,5 +1,6 @@
 package auto_deal.center.trade_detail.service;
 
+import auto_deal.center.cmm.model.CommonModel;
 import auto_deal.center.coin.domain.Coin;
 import auto_deal.center.coin.repository.CoinRepository;
 import auto_deal.center.quant.domain.Quant;
@@ -7,6 +8,7 @@ import auto_deal.center.talk.domain.Talk;
 import auto_deal.center.talk.repository.TalkRepository;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.trade_detail.domain.TradeDetail;
+import auto_deal.center.trade_detail.model.TradeDetailTalk;
 import auto_deal.center.trade_detail.repository.TradeDetailRepository;
 import auto_deal.center.user.domain.Users;
 import lombok.Getter;
@@ -24,10 +26,10 @@ public class TradeDetailService {
     private final TradeDetailRepository tradeDetailRepository;
     private final CoinRepository coinRepository;
     private final TalkRepository talkRepository;
-    @Getter
-    private TradeDetail tradeDetail = TradeDetail.builder().build();
 
-    public TradeDetail saveTradeDetail(String text, Users userOne){
+    public CommonModel saveTradeDetail(String text, Users userOne){
+
+        TradeDetailTalk model = new TradeDetailTalk();
 
         List<Talk> talks = talkRepository.findByUsersOrderByRegDateDesc(userOne);
 
@@ -50,11 +52,10 @@ public class TradeDetailService {
                                     .regdate(LocalDateTime.now())
                                     .build();
             tradeDeatail.setQuant(quant);
-        }
+            TradeDetail save = tradeDetailRepository.save(tradeDeatail);
+            model.set(save);
+       }
 
-        //싱글톤이라 tradeDetail 값을 하나 넣어줬는데... 흠 그래도 되나?!?!
-        // 한 트랜잭션 안이라 상관없을거라 판단되긴 하는데 문제가 될 수 있다고 생각됨
-        tradeDetail = tradeDetailRepository.save(tradeDeatail);
-        return tradeDetail;
+        return model;
     }
 }

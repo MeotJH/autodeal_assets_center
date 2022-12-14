@@ -1,8 +1,8 @@
 package auto_deal.center.user.service;
 
-import org.springframework.stereotype.Service;
+import auto_deal.center.cmm.model.CommonModel;
 
 public interface UserService {
 
-    Boolean Process(Long chatId, String text);
+    CommonModel Process(Long chatId, String text);
 }

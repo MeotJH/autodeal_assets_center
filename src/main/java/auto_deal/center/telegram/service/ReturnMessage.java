@@ -1,5 +1,6 @@
 package auto_deal.center.telegram.service;
 
+import auto_deal.center.cmm.model.CommonModel;
 import auto_deal.center.quant.domain.Quant;
 import auto_deal.center.quant.dto.QuantModel;
 import auto_deal.center.quant.service.QuantType;
@@ -8,6 +9,7 @@ import auto_deal.center.talk.domain.Talk;
 import auto_deal.center.talk.repository.TalkRepository;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.trade_detail.domain.TradeDetail;
+import auto_deal.center.trade_detail.model.TradeDetailTalk;
 import auto_deal.center.trade_detail.service.TradeDetailService;
 import auto_deal.center.user.domain.Users;
 import auto_deal.center.user.repository.UserRepository;
@@ -26,14 +28,19 @@ public class ReturnMessage {
     private final TradeDetailService tradeDetailService;
     private final Map<String,QuantType> quantTypes;
 
-    public String process(Long chatId,String text){
-        String message;
-        TradeDetail tradeDetail = tradeDetailService.getTradeDetail();
-        if(tradeDetail.getId() != null){
-            message = sendTradeMessage(tradeDetail);
-        }else{
-            message = telegramBotMessage(text);
+    public String process(CommonModel model,String text){
+        String message = error();
+
+        if( model.get() == null){
+            return telegramBotMessage(text);
         }
+
+        TradeDetail tradeDetail = TradeDetail.class.cast(model.get());
+
+        if(model.get() != null && tradeDetail.getId() != null){
+            message = sendTradeMessage(tradeDetail);
+        }
+
         return message;
     }
 
@@ -59,8 +66,5 @@ public class ReturnMessage {
         return quantModel.toRsltStr();
 
     }
-
-
-
 
 }

@@ -1,11 +1,10 @@
 package auto_deal.center.user.service;
 
+import auto_deal.center.cmm.model.CommonModel;
 import auto_deal.center.quant.domain.Quant;
 import auto_deal.center.quant.service.QuantService;
-import auto_deal.center.talk.domain.Talk;
 import auto_deal.center.talk.service.TalkService;
-import auto_deal.center.trade_detail.domain.TradeDetail;
-import auto_deal.center.trade_detail.repository.TradeDetailRepository;
+import auto_deal.center.trade_detail.model.TradeDetailTalk;
 import auto_deal.center.trade_detail.service.TradeDetailService;
 import auto_deal.center.user.domain.Users;
 import auto_deal.center.user.repository.UserRepository;
@@ -23,22 +22,22 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final QuantService quantService;
     private final TalkService talkService;
-
     private final TradeDetailService tradeDetailService;
 
     @Override
-    public Boolean Process(Long chatId, String text) {
+    public CommonModel Process(Long chatId, String text) {
         return this.saveUserTalk(chatId, text);
     }
 
     // 이 메소드에서 연관관계 주인이 왜 중요한지 알아냈다.
-    private boolean saveUserTalk(Long chatId, String text){
+    private CommonModel saveUserTalk(Long chatId, String text){
+        CommonModel model = new TradeDetailTalk();
         if( isUserExist(chatId) ){
-            saveUserRequst(chatId, text);
+            model = saveUserRequst(chatId, text);
         }else{
             saveNewUser(chatId, text);
         }
-        return Boolean.TRUE;
+        return model;
     }
     
     // chat 로 유저 존재하는지 bool값
@@ -52,8 +51,9 @@ public class UserServiceImpl implements UserService {
     }
     
     // 존재하던 유저라면 응답을 업데이트한다
-    private void saveUserRequst(Long chatId, String text){
+    private CommonModel saveUserRequst(Long chatId, String text){
         Users one = userRepository.findUserOneByChatId(chatId);
+        CommonModel model = new TradeDetailTalk();
         if( one != null){
             one.changRegDate();
             Users save = userRepository.save(one);
@@ -61,9 +61,10 @@ public class UserServiceImpl implements UserService {
             Quant quant = quantService.saveQuantByEnum(text, save);
 
             if( quant.getId() == null){
-                tradeDetailService.saveTradeDetail(text, save);
+                model = tradeDetailService.saveTradeDetail(text, save);
             }
         }
+        return model;
     }
     
     // 새로운 유저라면 저장한다
