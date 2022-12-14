@@ -34,7 +34,11 @@ public class TradeDetailService {
         List<Talk> talks = talkRepository.findByUsersOrderByRegDateDesc(userOne);
 
         //유저의 마지막 대화중 봇에 적어놓은 '/xxx' 기능을 마지막으로 가져온다.
-        Talk talk = talks.stream().filter(v -> v.getContent().contains("/")).findFirst().get();
+        Talk talk = talks.stream().filter(v -> v.getContent().contains("/")).findFirst().orElseGet( () -> Talk.builder().content("empty").build() );
+
+        if( talk.getContent().equals("empty")){
+            return model;
+        }
 
         // telegrambotmessage에서 해당 값과 같은 enum상수를 가져온다.
         String name = Arrays.stream(TelegramBotMessage.values()).filter(v -> v.getCodeKr().equals(talk.getContent()) || v.getCodeEn().equals(talk.getContent()) ).findFirst().get().name();
