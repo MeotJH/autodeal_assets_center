@@ -32,6 +32,12 @@ public class TelegramServiceImpl implements TelegramService {
 
     public TelegramServiceImpl(UserService userService, ReturnMessage returnMessage){
         this.telegramBot = new TelegramBot("5692669704:AAH4N_20QLZHskRN_cnDXDSWaFqHTe1y3VA");
+
+        /* TODO 환경으로 뺴기
+        5692669704:AAH4N_20QLZHskRN_cnDXDSWaFqHTe1y3VA -> quant_alarm_bot => 운영으로 사용 하기
+        5722974705:AAF60xPxcmm_PgxjD2bsPWKUoYl5ftu3V1c -> quant_two_bot => local에서 사용
+        5973588170:AAFjTa06Nj4x8_qPYCeHDLvuZ3SGbLYhoNg -> 현준이 아이디로 만든 봇
+         */
         this.activeListener();
         this.userService = userService;
         this.returnMessage = returnMessage;
@@ -63,6 +69,9 @@ public class TelegramServiceImpl implements TelegramService {
 
             Long chatId = 0L;
 
+            //Long chatId = each.message().chat().id();
+            //SendResponse response = telegramBot.execute(new SendMessage(chatId, "Hello!"));
+
             String rsltMsg = null;
             try{
                 chatId = each.message().from().id();
@@ -86,11 +95,7 @@ public class TelegramServiceImpl implements TelegramService {
     private void sendMessage(Long chatId, String rsltMsg) {
 
         SendMessage request = new SendMessage(chatId, rsltMsg)
-                                    .parseMode(ParseMode.HTML)
-                                    .disableWebPagePreview(true)
-                                    .disableNotification(true)
-                                    .replyToMessageId(1)
-                                    .replyMarkup(new ForceReply());
+                                    .disableWebPagePreview(true);
 
         SendResponse sendResponse = telegramBot.execute(request);
         boolean ok = sendResponse.isOk();
