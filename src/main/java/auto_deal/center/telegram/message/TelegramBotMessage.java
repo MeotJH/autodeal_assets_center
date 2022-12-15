@@ -46,4 +46,21 @@ public enum TelegramBotMessage {
         this.codeEn = codeEn;
         this.codeKr = codeKr;
     }
+
+    public static TelegramBotMessage getEquals(String text){
+        TelegramBotMessage telegramBotMessage = null;
+        for (TelegramBotMessage each : TelegramBotMessage.values()){
+            if(text.equals(each.getCodeKr()) || text.equals(each.getCodeEn())){
+                telegramBotMessage = each;
+                break;
+            }
+        }
+
+        if( telegramBotMessage == null ){
+            telegramBotMessage = TelegramBotMessage.EMPTY;
+        }
+
+        return telegramBotMessage;
+    }
+
 }

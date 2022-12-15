@@ -1,24 +1,18 @@
 package auto_deal.center.telegram.service;
 
 import auto_deal.center.cmm.model.CommonModel;
-import auto_deal.center.quant.domain.Quant;
 import auto_deal.center.quant.dto.QuantModel;
 import auto_deal.center.quant.service.QuantType;
-import auto_deal.center.quant.service.TrendFollow;
-import auto_deal.center.talk.domain.Talk;
-import auto_deal.center.talk.repository.TalkRepository;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.trade_detail.domain.TradeDetail;
-import auto_deal.center.trade_detail.model.TradeDetailTalk;
 import auto_deal.center.trade_detail.service.TradeDetailService;
-import auto_deal.center.user.domain.Users;
-import auto_deal.center.user.repository.UserRepository;
+import com.pengrad.telegrambot.model.Message;
+import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -26,6 +20,7 @@ import java.util.Map;
 public class ReturnMessage {
 
     private final TradeDetailService tradeDetailService;
+    private final TelegramService telegramService;
     private final Map<String,QuantType> quantTypes;
 
     public String process(CommonModel model,String text){
@@ -42,6 +37,14 @@ public class ReturnMessage {
         }
 
         return message;
+    }
+
+    public void process(Long chatId,TelegramBotMessage telegramBotMessage){
+        SendMessage request = new SendMessage(chatId, telegramBotMessage.getMessage())
+                .disableWebPagePreview(true);
+        SendResponse sendResponse = telegramService.getTelegramBot().execute(request);
+        boolean ok = sendResponse.isOk();
+        Message message = sendResponse.message();
     }
 
     public String error(){
