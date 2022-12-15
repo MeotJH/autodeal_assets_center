@@ -62,4 +62,9 @@ public class TradeDetailService {
 
         return model;
     }
+
+    public void saveTradeDetail(Long chatId, String text){
+
+
+    }
 }
