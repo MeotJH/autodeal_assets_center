@@ -7,12 +7,14 @@ import auto_deal.center.talk.repository.TalkRepository;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.trade_detail.service.TradeDetailService;
 import auto_deal.center.user.domain.Users;
+import auto_deal.center.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,31 +22,24 @@ import java.util.List;
 public class QuantServiceImpl implements QuantService{
 
     private final QuantRepository quantRepository;
-    private final TradeDetailService tradeDetailService;
 
-    private final TalkRepository talkRepository;
+    public Quant saveQuantByEnum(TelegramBotMessage tbm, Users users) {
+        if(isExist(tbm)){
+            return quantRepository.findByQuantType(tbm.name());
+        }
 
-    @Override
-    public String getBullMarketInfo(List<BullInfo> bullInfos) {
-        return null;
+        Quant quantOne = Quant.builder().quantType(tbm.name()).regdate(LocalDateTime.now()).build();
+        quantOne.setUser(users);
+        return quantRepository.save(quantOne);
     }
 
-    public Quant saveQuantByEnum(String text, Users userOne) {
-        Quant returnRslt = Quant.builder().build();
-        TelegramBotMessage quantType = null;
-        for(TelegramBotMessage each :TelegramBotMessage.values()){
-            if( each.getCodeKr().equals(text) || each.getCodeEn().equals(text) ){
-                quantType = each;
-                break;
-            }
+    private Boolean isExist(TelegramBotMessage tbm) {
+        Optional<Quant> opt = Optional.ofNullable(quantRepository.findByQuantType(tbm.name()));
+        if(opt.isPresent()){
+            return true;
+        }else{
+            return false;
         }
-
-        if( quantType != null){
-            Quant quantOne = Quant.builder().quantType(quantType.toString()).regdate(LocalDateTime.now()).build();
-            quantOne.setUser(userOne);
-            returnRslt = quantRepository.save(quantOne);
-        }
-        return returnRslt;
     }
 
 }

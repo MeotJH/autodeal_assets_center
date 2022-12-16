@@ -1,47 +1,43 @@
 package auto_deal.center.telegram.service;
 
+import auto_deal.center.cmm.controller.MainProcessor;
 import auto_deal.center.cmm.model.CommonModel;
 import auto_deal.center.telegram.message.TelegramBotMessage;
-import auto_deal.center.trade_detail.model.TradeDetailTalk;
+import auto_deal.center.telegram.model.TelegramBotManager;
 import auto_deal.center.user.service.UserService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.*;
-import com.pengrad.telegrambot.model.request.*;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class TelegramServiceImpl implements TelegramService {
 
-    TelegramBot telegramBot;
 
-    private final UserService userService;
+    private final TelegramBotManager telegramBotManager;
+    private final MainProcessor mainProcessor;
     private final ReturnMessage returnMessage;
+    private TelegramBot telegramBot;
 
-
-    public TelegramServiceImpl(UserService userService, ReturnMessage returnMessage){
-        this.telegramBot = new TelegramBot("5692669704:AAH4N_20QLZHskRN_cnDXDSWaFqHTe1y3VA");
-
-        /* TODO 환경으로 뺴기
-        5692669704:AAH4N_20QLZHskRN_cnDXDSWaFqHTe1y3VA -> quant_alarm_bot => 운영으로 사용 하기
-        5722974705:AAF60xPxcmm_PgxjD2bsPWKUoYl5ftu3V1c -> quant_two_bot => local에서 사용
-        5973588170:AAFjTa06Nj4x8_qPYCeHDLvuZ3SGbLYhoNg -> 현준이 아이디로 만든 봇
-         */
+    @PostConstruct
+    private void activeAfterConstruct(){
+        this.telegramBot = telegramBotManager.getTelegramBot();
         this.activeListener();
-        this.userService = userService;
-        this.returnMessage = returnMessage;
     }
+
 
     //리스너를 등록해 놓는 메소드
     private void activeListener(){
@@ -66,41 +62,23 @@ public class TelegramServiceImpl implements TelegramService {
         // 루프를 돌며 대화에 맞는 답변을 한다.
         List<Update> updates = updatesResponse.updates();
         for(Update each: updates){
-
             Long chatId = 0L;
+            String text = each.message().text();
 
-            //Long chatId = each.message().chat().id();
-            //SendResponse response = telegramBot.execute(new SendMessage(chatId, "Hello!"));
-
-            String rsltMsg = null;
             try{
                 chatId = each.message().from().id();
-                String text = each.message().text();
-                //DB도입 시작부분
-                CommonModel processed = userService.Process(chatId, text);
-                rsltMsg = returnMessage.process(processed,text);
-
+                //Domain 관련 서비스 시작부분
+                mainProcessor.process(chatId,text);
             }catch(Exception e){
                 e.printStackTrace();
-                log.info(e.getMessage());
-                rsltMsg = returnMessage.error();
-            }finally {
-                // 메세지를 보낸다.
-                sendMessage(chatId, rsltMsg);
+                log.error(e.getMessage());
+                log.error(e.toString());
+                returnMessage.process(chatId, TelegramBotMessage.getEquals(text));
             }
 
         }
     }
 
-    private void sendMessage(Long chatId, String rsltMsg) {
-
-        SendMessage request = new SendMessage(chatId, rsltMsg)
-                                    .disableWebPagePreview(true);
-
-        SendResponse sendResponse = telegramBot.execute(request);
-        boolean ok = sendResponse.isOk();
-        Message message = sendResponse.message();
-    }
 
 
 }

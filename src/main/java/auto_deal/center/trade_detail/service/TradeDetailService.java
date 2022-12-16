@@ -16,8 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,41 +24,18 @@ public class TradeDetailService {
 
     private final TradeDetailRepository tradeDetailRepository;
     private final CoinRepository coinRepository;
-    private final TalkRepository talkRepository;
 
-    public CommonModel saveTradeDetail(String text, Users userOne){
-
-        TradeDetailTalk model = new TradeDetailTalk();
-
-        List<Talk> talks = talkRepository.findByUsersOrderByRegDateDesc(userOne);
-
-        //유저의 마지막 대화중 봇에 적어놓은 '/xxx' 기능을 마지막으로 가져온다.
-        Talk talk = talks.stream().filter(v -> v.getContent().contains("/")).findFirst().orElseGet( () -> Talk.builder().content("empty").build() );
-
-        if( talk.getContent().equals("empty")){
-            return model;
-        }
-
-        // telegrambotmessage에서 해당 값과 같은 enum상수를 가져온다.
-        String name = Arrays.stream(TelegramBotMessage.values()).filter(v -> v.getCodeKr().equals(talk.getContent()) || v.getCodeEn().equals(talk.getContent()) ).findFirst().get().name();
-
-        // 위 enum에 맞는 quant투자법을 Quant DB에서 가져온다.
-        Quant quant = userOne.getQuants().stream().filter(v -> v.getQuantType().equals(name)).findFirst().get();
-
-        TradeDetail tradeDeatail = TradeDetail.builder().build();
-        Coin coinByKorea = coinRepository.findCoinByKorea(text);
+    public TradeDetail saveTradeDetail(Long chatId, String text,Quant quant){
+        TradeDetail rslt = TradeDetail.builder().build();
+        Coin beforeOpt = coinRepository.findCoinByKorea(text);
+        Coin coin = Optional.ofNullable(beforeOpt).orElseThrow(() -> new RuntimeException("해당하는 한글 코인이 없습니다."));
 
         // 한국어로 DB에 init되어있는 코인객체를 가져와 결국 TB_TRADE_DETAIL 에 넣어준다.
-       if( coinByKorea != null){
-            tradeDeatail = TradeDetail.builder()
-                                    .coinTicker(coinByKorea.getTicker())
-                                    .regdate(LocalDateTime.now())
-                                    .build();
-            tradeDeatail.setQuant(quant);
-            TradeDetail save = tradeDetailRepository.save(tradeDeatail);
-            model.set(save);
-       }
-
-        return model;
+        TradeDetail tradeDeatail = TradeDetail.builder()
+                                                .coinTicker(coin.getTicker())
+                                                .regdate(LocalDateTime.now())
+                                                .build();
+        tradeDeatail.setQuant(quant);
+        return tradeDetailRepository.save(tradeDeatail);
     }
 }

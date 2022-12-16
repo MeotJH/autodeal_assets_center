@@ -10,8 +10,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface QuantService {
-
-    String getBullMarketInfo(List<BullInfo> bullInfos);
-
-    Quant saveQuantByEnum(String text, Users user);
+    Quant saveQuantByEnum(TelegramBotMessage tbm,Users user);
 }
