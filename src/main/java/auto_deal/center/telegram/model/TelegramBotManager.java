@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class TelegramBotManager {
-    @Value("${telegram.bot.quant_two_dev}")
+    @Value("${telegram.bot.quant_two_prd}")
     private String botKey;
 
     @Getter
