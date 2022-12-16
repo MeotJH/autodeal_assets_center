@@ -13,9 +13,9 @@ public class CoinServiceImpl {
 
     private final CoinRepository coinRepository;
 
-    public Boolean isExist(String ticker){
+    public Boolean isExist(String coinKor){
         Boolean exist = false;
-        Optional<Coin> optional = Optional.ofNullable(coinRepository.findCoinByTicker(ticker));
+        Optional<Coin> optional = Optional.ofNullable(coinRepository.findCoinByKorea(coinKor));
         if(optional.isPresent()){
             exist = true;
         }else {

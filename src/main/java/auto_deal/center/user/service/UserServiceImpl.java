@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean isUserExist(Long chatId, String text) {
+    public Boolean isUserExist(Long chatId) {
         Boolean exist = false;
         Optional<Users> userDefine = Optional.ofNullable(userRepository.findUserOneByChatId(chatId));
         if(userDefine.isPresent()){
@@ -42,17 +42,6 @@ public class UserServiceImpl implements UserService {
         return exist;
     }
 
-    @Override
-    public Optional<Users> getUser(Long chatId) {
-        return Optional.ofNullable(userRepository.findUserOneByChatId(chatId));
-    }
-
-    @Override
-    public CommonModel Process(Long chatId, String text) {
-        return null;//this.saveUserTalk(chatId, text);
-    }
-
-    // 이 메소드에서 연관관계 주인이 왜 중요한지 알아냈다.
     private Users saveUserTalk(Long chatId, String text){
         Users users = new Users();
         if( isUserExist(chatId) ){
@@ -63,31 +52,11 @@ public class UserServiceImpl implements UserService {
         return users;
     }
     
-    // chat 로 유저 존재하는지 bool값
-    private Boolean isUserExist(Long chatId){
-        Users users = userRepository.findUserOneByChatId(chatId);
-        if(users != null){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    
     // 존재하던 유저라면 응답을 업데이트한다
     private Users saveUserRequst(Long chatId, String text){
-        Users one = userRepository.findUserOneByChatId(chatId);
-        CommonModel model = new TradeDetailTalk();
-        if( one != null){
-            one.changRegDate();
-            one = userRepository.save(one);
-            talkService.saveTalk(text,one);
-            Quant quant = quantService.saveQuantByEnum(text, one);
-
-            if( quant.getId() == null){
-                model = tradeDetailService.saveTradeDetail(text, one);
-            }
-        }
-        return one;
+        Users one = Optional.ofNullable(userRepository.findUserOneByChatId(chatId)).orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+        one.changRegDate();
+        return userRepository.save(one);
     }
     
     // 새로운 유저라면 저장한다
@@ -100,10 +69,6 @@ public class UserServiceImpl implements UserService {
                     .regDate(LocalDateTime.now())
                     .build()
         );
-
-        // fk의 주인인 Many를 저장하면 자동으로
-        quantService.saveQuantByEnum(text,userSaved);
-        talkService.saveTalk(text,userSaved);
 
         return userSaved;
     }

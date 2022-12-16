@@ -1,7 +1,8 @@
-package auto_deal.center.coin.service;
+package auto_deal.center.api.service;
 
 import auto_deal.center.coin.domain.Coin;
 import auto_deal.center.coin.repository.CoinRepository;
+import auto_deal.center.coin.service.CoinRdbSyncManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

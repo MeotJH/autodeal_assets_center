@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface QuantRepository extends JpaRepository<Quant, Long> {
+
+    Quant findByQuantType(String QuantType);
 }
