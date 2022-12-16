@@ -1,33 +1,9 @@
 spring:
-  datasource:
-    url: jdbc:mariadb://database-1.cbjmqcjskomt.ap-northeast-2.rds.amazonaws.com:3306/question_over_flow
-    username: meotjh
-    password: rlawlsgks12
-    driver-class-name: org.mariadb.jdbc.Driver
-#    driver-class-name: org.h2.Driver
-#    url: "jdbc:h2:tcp://localhost/~/auto_deal"
-#    username: rlawlsgks
-#    password: rlawlsgks
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        #        show_sql: true
-        format_sql: true
-        default_batch_fetch_size: 100
-
+  profiles:
+    active: dev
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
-
 bithumb:
   url: https://api.bithumb.com
-
-telegram:
-  bot:
-    quant_two_prd: "5692669704:AAH4N_20QLZHskRN_cnDXDSWaFqHTe1y3VA"
-    quant_two_dev: "5722974705:AAF60xPxcmm_PgxjD2bsPWKUoYl5ftu3V1c"
-    quant_two_hyun: "5973588170:AAFjTa06Nj4x8_qPYCeHDLvuZ3SGbLYhoNg"
