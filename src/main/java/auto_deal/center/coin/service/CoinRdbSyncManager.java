@@ -5,4 +5,6 @@ public interface CoinRdbSyncManager {
     void updateCoinToDb();
 
     void initCoinName();
+
+    void init3MAvgPri();
 }

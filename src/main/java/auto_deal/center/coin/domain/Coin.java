@@ -32,6 +32,7 @@ public class Coin {
     private String acc_trade_value_24H;
     private String fluctate_24H;
     private String fluctate_rate_24H;
+    private Long three_month_avg_price;
 
     public Coin updateCoinData(CoinApiRslt.Coin coin){
         this.opening_price = coin.getOpening_price();
@@ -52,6 +53,11 @@ public class Coin {
     public Coin updateCoinName(CoinInitModel coin){
         this.korea = coin.getKorea();
         this.english = coin.getEnglish();
+        return this;
+    }
+
+    public Coin update3MAvgPrice(Long price){
+        this.three_month_avg_price = price;
         return this;
     }
 

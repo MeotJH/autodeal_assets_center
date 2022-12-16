@@ -2,21 +2,26 @@ package auto_deal.center.quant.service;
 
 import auto_deal.center.api.coin.CoinPrice;
 import auto_deal.center.api.coin.model.CoinOhlcvRslt;
-import auto_deal.center.quant.dto.QuantModel;
-import auto_deal.center.quant.dto.TrendFollowModel;
+import auto_deal.center.coin.domain.Coin;
+import auto_deal.center.coin.service.CoinService;
+import auto_deal.center.quant.model.QuantModel;
+import auto_deal.center.quant.model.TrendFollowModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
 @Service
+@Primary
 @RequiredArgsConstructor
 public class TrendFollow implements QuantType {
 
     private final CoinPrice coinPrice;
+    private final CoinService coinService;
 
     @Override
     public QuantModel get(String ticker){
@@ -28,10 +33,24 @@ public class TrendFollow implements QuantType {
             List<List<String>> priceHistory = rslt.getData();
             Long Price = getThreeMonthTrendFollowPrice(priceHistory);
             model = defineBuyOrNot(ticker, Price);
-
         }
 
         return model;
+    }
+
+    public void saveAllThreeMonthTrend(){
+
+        for (Coin each : coinService.getAllTicker()) {
+            CoinOhlcvRslt rslt = coinPrice.getOhlcv(each.getTicker());
+            if(isStatusOk(rslt)){
+                List<List<String>> priceHistory = rslt.getData();
+                Long price = getThreeMonthTrendFollowPrice(priceHistory);
+                each.update3MAvgPrice(price);
+                coinService.save(each);
+            }
+
+        }
+
     }
 
     private boolean isStatusOk(CoinOhlcvRslt rslt) {

@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TradeDetailRepository extends JpaRepository<TradeDetail,Long> {
+
+    TradeDetail findByCoinTicker(String coinTicker);
 }

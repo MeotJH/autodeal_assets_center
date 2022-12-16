@@ -1,19 +1,16 @@
 package auto_deal.center.telegram.service;
 
-import auto_deal.center.cmm.model.CommonModel;
-import auto_deal.center.quant.dto.QuantModel;
+import auto_deal.center.quant.model.QuantModel;
 import auto_deal.center.quant.service.QuantType;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.telegram.model.TelegramBotManager;
 import auto_deal.center.trade_detail.domain.TradeDetail;
-import auto_deal.center.trade_detail.service.TradeDetailService;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Map;
 
 @Service

@@ -1,17 +1,10 @@
 package auto_deal.center.trade_detail.service;
 
-import auto_deal.center.cmm.model.CommonModel;
 import auto_deal.center.coin.domain.Coin;
 import auto_deal.center.coin.repository.CoinRepository;
 import auto_deal.center.quant.domain.Quant;
-import auto_deal.center.talk.domain.Talk;
-import auto_deal.center.talk.repository.TalkRepository;
-import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.trade_detail.domain.TradeDetail;
-import auto_deal.center.trade_detail.model.TradeDetailTalk;
 import auto_deal.center.trade_detail.repository.TradeDetailRepository;
-import auto_deal.center.user.domain.Users;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +22,14 @@ public class TradeDetailService {
         TradeDetail rslt = TradeDetail.builder().build();
         Coin beforeOpt = coinRepository.findCoinByKorea(text);
         Coin coin = Optional.ofNullable(beforeOpt).orElseThrow(() -> new RuntimeException("해당하는 한글 코인이 없습니다."));
+        
+        //이미 있는거라면 있는거 리턴
+        Optional<TradeDetail> byCoinTicker = Optional.ofNullable(tradeDetailRepository.findByCoinTicker(coin.getTicker()));
+        if(byCoinTicker.isPresent()){
+            return byCoinTicker.get();
+        }
 
-        // 한국어로 DB에 init되어있는 코인객체를 가져와 결국 TB_TRADE_DETAIL 에 넣어준다.
+        // 한국어로 DB에 init되어있는 코인객체를 가져와 TB_TRADE_DETAIL 에 넣어준다.
         TradeDetail tradeDeatail = TradeDetail.builder()
                                                 .coinTicker(coin.getTicker())
                                                 .regdate(LocalDateTime.now())

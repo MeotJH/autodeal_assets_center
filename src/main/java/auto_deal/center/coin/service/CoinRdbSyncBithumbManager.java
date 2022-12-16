@@ -5,6 +5,7 @@ import auto_deal.center.api.coin.model.CoinApiRslt;
 import auto_deal.center.coin.domain.Coin;
 import auto_deal.center.coin.model.CoinInitModel;
 import auto_deal.center.coin.repository.CoinRepository;
+import auto_deal.center.quant.service.QuantType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class CoinRdbSyncBithumbManager implements CoinRdbSyncManager {
     private final CoinPrice coinPrice;
     private final CoinRepository coinRepository;
 
+    private final QuantType quantType;
     public void updateCoinToDb(){
         CoinApiRslt prices = coinPrice.getPrices();
         prices.getData().get("BTC").getMax_price();
@@ -72,6 +74,11 @@ public class CoinRdbSyncBithumbManager implements CoinRdbSyncManager {
             }
             coinRepository.save(coin);
         }
+    }
+
+    @Override
+    public void init3MAvgPri() {
+        //TODO coinRdbSyncManger 와 QuantType 결과 간의 간극 어떻게 해결?!?!
     }
 
 

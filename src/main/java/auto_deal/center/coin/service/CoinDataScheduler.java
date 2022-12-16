@@ -16,4 +16,9 @@ public class CoinDataScheduler {
     public void syncDataPerDay(){
         coinRdbSyncManager.updateCoinToDb();
     }
+
+    @Scheduled(fixedDelay = 24*60*60*1000, initialDelay = 10000)
+    public void syncDataThreeMonthAvgPrc(){
+        coinRdbSyncManager.init3MAvgPri();
+    }
 }
