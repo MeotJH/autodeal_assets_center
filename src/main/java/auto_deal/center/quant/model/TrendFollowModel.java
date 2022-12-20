@@ -1,12 +1,15 @@
 package auto_deal.center.quant.model;
 
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
 public class TrendFollowModel implements QuantModel{
 
     private String ticker;
     private Long nowPrice;
+
+    @Getter
     private Long targetPrice;
     private Boolean isBuy;
 
