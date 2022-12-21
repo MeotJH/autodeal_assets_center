@@ -2,14 +2,9 @@ package auto_deal.center.quant.service;
 
 import auto_deal.center.quant.domain.Quant;
 import auto_deal.center.quant.repository.QuantRepository;
-import auto_deal.center.talk.domain.Talk;
 import auto_deal.center.telegram.message.TelegramBotMessage;
-import auto_deal.center.trade_detail.repository.TradeDetailRepository;
-import auto_deal.center.trade_detail.service.TradeDetailService;
 import auto_deal.center.user.domain.Users;
 import auto_deal.center.user.repository.UserRepository;
-import auto_deal.center.user.service.UserService;
-import net.bytebuddy.asm.Advice;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,10 +35,10 @@ class QuantServiceTest {
         Users saved = userRepository.save(Users.builder().build());
         //when
         quantService.saveQuantByEnum(TelegramBotMessage.TREND_FOLLOW, saved);
-        Quant byQuantType = quantRepository.findByQuantType(tbm.name());
+        List<Quant> byQuantType = quantRepository.findByQuantType(tbm.name());
 
         //then
-        Assertions.assertThat(byQuantType.getQuantType()).isEqualTo(tbm.name());
+        Assertions.assertThat(byQuantType.get(0).getQuantType()).isEqualTo(tbm.name());
     }
 
     @Test

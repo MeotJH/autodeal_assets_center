@@ -11,4 +11,6 @@ public interface CoinService {
     public Coin save(Coin coin);
 
     public List<Coin> getAllTicker();
+
+    Coin getCoin(String ticker);
 }

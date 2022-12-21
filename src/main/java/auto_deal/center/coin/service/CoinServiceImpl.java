@@ -36,4 +36,9 @@ public class CoinServiceImpl implements CoinService{
     public List<Coin> getAllTicker() {
         return coinRepository.findAll();
     }
+
+    @Override
+    public Coin getCoin(String ticker) {
+        return coinRepository.findCoinByTicker(ticker);
+    }
 }

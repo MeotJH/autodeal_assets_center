@@ -19,12 +19,11 @@ public class TradeDetailService {
     private final CoinRepository coinRepository;
 
     public TradeDetail saveTradeDetail(Long chatId, String text,Quant quant){
-        TradeDetail rslt = TradeDetail.builder().build();
         Coin beforeOpt = coinRepository.findCoinByKorea(text);
         Coin coin = Optional.ofNullable(beforeOpt).orElseThrow(() -> new RuntimeException("해당하는 한글 코인이 없습니다."));
         
         //이미 있는거라면 있는거 리턴
-        Optional<TradeDetail> byCoinTicker = Optional.ofNullable(tradeDetailRepository.findByCoinTicker(coin.getTicker()));
+        Optional<TradeDetail> byCoinTicker = Optional.ofNullable(tradeDetailRepository.findByCoinTickerAndQuant(coin.getTicker(),quant));
         if(byCoinTicker.isPresent()){
             return byCoinTicker.get();
         }
@@ -37,4 +36,5 @@ public class TradeDetailService {
         tradeDeatail.setQuant(quant);
         return tradeDetailRepository.save(tradeDeatail);
     }
+
 }
