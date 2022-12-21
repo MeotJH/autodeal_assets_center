@@ -5,10 +5,14 @@ import auto_deal.center.api.coin.model.CoinApiRslt;
 import auto_deal.center.coin.domain.Coin;
 import auto_deal.center.coin.model.CoinInitModel;
 import auto_deal.center.coin.repository.CoinRepository;
+import auto_deal.center.quant.model.QuantModel;
+import auto_deal.center.quant.model.TrendFollowModel;
 import auto_deal.center.quant.service.QuantType;
+import auto_deal.center.quant.service.TrendFollow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -76,8 +80,17 @@ public class CoinRdbSyncBithumbManager implements CoinRdbSyncManager {
         }
     }
 
+
     @Override
-    public void init3MAvgPri() {
+    public void init3MAvgPrice() {
+        List<QuantModel> all = quantType.getAll(); // 1분 40초
+        for (QuantModel each: all) {
+            TrendFollowModel cast = TrendFollowModel.class.cast(each);
+            // 하나씩 가져오는.... 이게 맞나??
+            Coin coinByTicker = coinRepository.findCoinByTicker(cast.getTicker());
+            coinByTicker.update3MAvgPrice(cast.getTargetPrice());
+            coinRepository.save(coinByTicker);
+        }
         //TODO coinRdbSyncManger 와 QuantType 결과 간의 간극 어떻게 해결?!?!
     }
 

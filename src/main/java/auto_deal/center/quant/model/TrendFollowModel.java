@@ -6,9 +6,9 @@ import lombok.Getter;
 @Builder
 public class TrendFollowModel implements QuantModel{
 
+    @Getter
     private String ticker;
     private Long nowPrice;
-
     @Getter
     private Long targetPrice;
     private Boolean isBuy;

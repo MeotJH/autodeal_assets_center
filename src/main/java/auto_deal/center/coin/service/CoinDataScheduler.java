@@ -12,13 +12,13 @@ public class CoinDataScheduler {
 
     // 서버 기동된 후 1초에 처음 시작하고 24시간에 한번
     // TODO - 서버 기동된 후 1초에 처음 시작하고 매일밤 24시에 한번으로 바꾸기
-    @Scheduled(fixedDelay = 24*60*60*1000, initialDelay = 1000)
+    @Scheduled(cron = "0 5 0 * * *")
     public void syncDataPerDay(){
         coinRdbSyncManager.updateCoinToDb();
     }
 
-    @Scheduled(fixedDelay = 24*60*60*1000, initialDelay = 10000)
+    @Scheduled(cron = "0 5 0 * * *")
     public void syncDataThreeMonthAvgPrc(){
-        coinRdbSyncManager.init3MAvgPri();
+        coinRdbSyncManager.init3MAvgPrice();
     }
 }

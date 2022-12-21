@@ -10,6 +10,4 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
     Coin findCoinByTicker(String ticker);
     Coin findCoinByKorea(String korea);
 
-    @Query("select new Coin(d.id, d.ticker) from Coin d")
-    List<Coin> findAllTicker();
 }

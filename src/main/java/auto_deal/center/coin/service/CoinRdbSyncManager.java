@@ -6,5 +6,5 @@ public interface CoinRdbSyncManager {
 
     void initCoinName();
 
-    void init3MAvgPri();
+    void init3MAvgPrice();
 }

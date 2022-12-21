@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -38,19 +39,20 @@ public class TrendFollow implements QuantType {
         return model;
     }
 
-    public void saveAllThreeMonthTrend(){
-
+    @Override
+    public List<QuantModel> getAll(){
+        List<QuantModel> models = new ArrayList<>();
+        QuantModel model = null;
         for (Coin each : coinService.getAllTicker()) {
             CoinOhlcvRslt rslt = coinPrice.getOhlcv(each.getTicker());
             if(isStatusOk(rslt)){
                 List<List<String>> priceHistory = rslt.getData();
                 Long price = getThreeMonthTrendFollowPrice(priceHistory);
-                each.update3MAvgPrice(price);
-                coinService.save(each);
+                model = defineBuyOrNot(each.getTicker(), price);
+                models.add(model);
             }
-
         }
-
+        return models;
     }
 
     private boolean isStatusOk(CoinOhlcvRslt rslt) {
@@ -64,8 +66,13 @@ public class TrendFollow implements QuantType {
 
         Long sum = 0L;
         int cnt = 0;
+
+        if( threeMonthBefore < 0){
+            return 0L;
+        }
+
         for (int i = threeMonthBefore; i < today; i++) {
-            Long temp = Long.parseLong(priceHistory.get(i).get(2));
+            Long temp = Long.parseLong(String.valueOf(Math.round(Double.parseDouble(priceHistory.get(i).get(2)))));
             sum = sum + temp;
         }
 
@@ -76,12 +83,12 @@ public class TrendFollow implements QuantType {
     @NotNull
     private QuantModel defineBuyOrNot(String ticker, Long price) {
         Boolean isBuy;
-        long nowPrice = coinPrice
+        long nowPrice = Math.round(coinPrice
                 .getNowPrice(ticker)
                 .getJSONObject("data")
                 .getJSONArray("bids")
                 .getJSONObject(0)
-                .getLong("price");
+                .getDouble("price"));
 
 
         log.info("::::::::: coin now price :::: {} :::::",nowPrice);

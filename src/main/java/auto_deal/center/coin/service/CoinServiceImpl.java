@@ -34,6 +34,6 @@ public class CoinServiceImpl implements CoinService{
 
     @Override
     public List<Coin> getAllTicker() {
-        return coinRepository.findAllTicker();
+        return coinRepository.findAll();
     }
 }

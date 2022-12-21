@@ -14,6 +14,8 @@ public class InitSyncManager {
 
     @PostConstruct
     public void init() {
+        coinRdbSyncManager.updateCoinToDb();
         coinRdbSyncManager.initCoinName();
+        coinRdbSyncManager.init3MAvgPrice();
     }
 }
