@@ -7,4 +7,6 @@ import java.util.List;
 public interface QuantType {
     QuantModel get(String ticker);
     List<QuantModel> getAll();
+
+
 }

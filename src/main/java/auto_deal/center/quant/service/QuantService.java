@@ -6,4 +6,6 @@ import auto_deal.center.user.domain.Users;
 
 public interface QuantService {
     Quant saveQuantByEnum(TelegramBotMessage tbm,Users user);
+
+    String notice(String quantType);
 }

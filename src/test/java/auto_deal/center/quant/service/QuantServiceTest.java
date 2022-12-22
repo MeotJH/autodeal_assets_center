@@ -56,4 +56,19 @@ class QuantServiceTest {
         //then
         Assertions.assertThat(savedQuant.getId()).isEqualTo(secondSavedQuant.getId());
     }
+
+    @Test
+    @DisplayName("알림처리를 위한 notice를 가져와야 한다.")
+    @Transactional(rollbackFor = Exception.class)
+    void noticeTest() {
+        //given
+        String trend_follow = quantService.notice("TREND_FOLLOW");
+
+        //when
+
+
+        //then
+        Assertions.assertThat(trend_follow).isEqualTo("true");
+
+    }
 }

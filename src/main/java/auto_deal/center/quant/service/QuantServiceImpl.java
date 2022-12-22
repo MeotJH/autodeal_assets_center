@@ -1,6 +1,5 @@
 package auto_deal.center.quant.service;
 
-import auto_deal.center.coin.domain.Coin;
 import auto_deal.center.coin.service.CoinService;
 import auto_deal.center.quant.domain.Quant;
 import auto_deal.center.quant.repository.QuantRepository;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,7 +22,9 @@ public class QuantServiceImpl implements QuantService{
 
     private final QuantRepository quantRepository;
     private final CoinService coinService;
+    private final Map<String,QuantType> quantTypes;
 
+    @Override
     public Quant saveQuantByEnum(TelegramBotMessage tbm, Users users) {
         if(isExist(tbm,users)){
             return quantRepository.findByQuantTypeAndUsers(tbm.name(),users);
@@ -33,14 +35,12 @@ public class QuantServiceImpl implements QuantService{
         return quantRepository.save(quantOne);
     }
 
-    public void notice(String quantType){
-        List<Quant> byQuantType = quantRepository.findByQuantType(quantType);
-        for (Quant quant: byQuantType) {
-            List<TradeDetail> tradeDetails = quant.getTradeDetails();
-            for (TradeDetail tradeDetail: tradeDetails) {
-                //Coin coin = coinService.getCoin(tradeDetail.getCoinTicker()).update3MAvgPrice();
-            }
-        }
+    @Override
+    public String notice(String quantType){
+        TelegramBotMessage equals = TelegramBotMessage.valueOf(quantType);
+        QuantType quantTypeObj = quantTypes.get(equals.getBeanNm());
+
+        return "fail";
     }
 
 
