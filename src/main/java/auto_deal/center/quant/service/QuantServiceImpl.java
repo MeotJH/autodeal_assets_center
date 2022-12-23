@@ -39,7 +39,7 @@ public class QuantServiceImpl implements QuantService{
     public String notice(String quantType){
         TelegramBotMessage equals = TelegramBotMessage.valueOf(quantType);
         QuantType quantTypeObj = quantTypes.get(equals.getBeanNm());
-
+        // todo 언제 알림할지 파악해야 한다.
         return "fail";
     }
 
