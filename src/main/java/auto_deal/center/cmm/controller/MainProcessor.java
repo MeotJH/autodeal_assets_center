@@ -7,6 +7,7 @@ import auto_deal.center.talk.service.TalkService;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.telegram.service.ReturnMessage;
 import auto_deal.center.trade_detail.service.TradeDetailService;
+import auto_deal.center.trend_follow.domain.TrendFollow;
 import auto_deal.center.user.domain.Users;
 import auto_deal.center.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,8 @@ public class MainProcessor {
             }else if( coinService.isExist(text) ){ // coin 이다
                 TelegramBotMessage prevTalk = talkService.getPrevTalk(processedUser);
                 Quant quant = quantService.saveQuantByEnum(prevTalk, processedUser);
-                returnMessage.process( tradeDetailService.saveTradeDetail(chatId, text, quant) );
+                // 해당부분 dynamic으로 바꾸기
+                returnMessage.process( tradeDetailService.saveTradeDetail(chatId, text, quant, TrendFollow.class) );
             }else{
                 returnMessage.process(chatId, TelegramBotMessage.EMPTY);
             }

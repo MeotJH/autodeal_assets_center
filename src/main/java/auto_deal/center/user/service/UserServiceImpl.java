@@ -1,11 +1,5 @@
 package auto_deal.center.user.service;
 
-import auto_deal.center.cmm.model.CommonModel;
-import auto_deal.center.quant.domain.Quant;
-import auto_deal.center.quant.service.QuantService;
-import auto_deal.center.talk.service.TalkService;
-import auto_deal.center.trade_detail.model.TradeDetailTalk;
-import auto_deal.center.trade_detail.service.TradeDetailService;
 import auto_deal.center.user.domain.Users;
 import auto_deal.center.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +15,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final QuantService quantService;
-    private final TalkService talkService;
-    private final TradeDetailService tradeDetailService;
 
     @Override
     public Users process(Long chatId, String text) {

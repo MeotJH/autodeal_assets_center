@@ -4,7 +4,7 @@ import auto_deal.center.quant.model.QuantModel;
 import auto_deal.center.quant.service.QuantType;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.telegram.model.TelegramBotManager;
-import auto_deal.center.trade_detail.domain.TradeDetail;
+import auto_deal.center.trend_follow.domain.TrendFollow;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
@@ -27,10 +27,10 @@ public class ReturnMessage {
         //Message message = sendResponse.message();
     }
 
-    public void process(TradeDetail tradeDetail){
-        String coinTicker = tradeDetail.getCoinTicker();
-        String quantType = tradeDetail.getQuant().getQuantType();
-        Long chatId = tradeDetail.getQuant().getUsers().getChatId();
+    public void process(TrendFollow trendFollow){
+        String coinTicker = trendFollow.getCoinTicker();
+        String quantType = trendFollow.getQuant().getQuantType();
+        Long chatId = trendFollow.getQuant().getUsers().getChatId();
 
         QuantModel quantModel = quantTypes.get(TelegramBotMessage.valueOf(TelegramBotMessage.class, quantType).getBeanNm()).get(coinTicker);
 

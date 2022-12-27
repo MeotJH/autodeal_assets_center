@@ -1,6 +1,5 @@
 package auto_deal.center.quant.domain;
 
-import auto_deal.center.trade_detail.domain.TradeDetail;
 import auto_deal.center.trend_follow.domain.TrendFollow;
 import auto_deal.center.user.domain.Users;
 import lombok.*;
@@ -24,11 +23,6 @@ public class Quant {
 
     @Column
     private String quantType;
-
-    @OneToMany(mappedBy = "quant")
-    @Builder.Default
-    @Column
-    private List<TradeDetail> tradeDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "quant")
     @Builder.Default

@@ -5,7 +5,6 @@ import auto_deal.center.quant.domain.Quant;
 import auto_deal.center.quant.model.QuantModel;
 import auto_deal.center.quant.repository.QuantRepository;
 import auto_deal.center.telegram.message.TelegramBotMessage;
-import auto_deal.center.trade_detail.domain.TradeDetail;
 import auto_deal.center.user.domain.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
