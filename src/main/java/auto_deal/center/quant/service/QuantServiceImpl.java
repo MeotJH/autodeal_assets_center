@@ -2,6 +2,7 @@ package auto_deal.center.quant.service;
 
 import auto_deal.center.coin.service.CoinService;
 import auto_deal.center.quant.domain.Quant;
+import auto_deal.center.quant.model.QuantModel;
 import auto_deal.center.quant.repository.QuantRepository;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.trade_detail.domain.TradeDetail;
@@ -39,7 +40,9 @@ public class QuantServiceImpl implements QuantService{
     public String notice(String quantType){
         TelegramBotMessage equals = TelegramBotMessage.valueOf(quantType);
         QuantType quantTypeObj = quantTypes.get(equals.getBeanNm());
-        // todo 언제 알림할지 파악해야 한다.
+        List<QuantModel> all = quantTypeObj.getAll();
+
+        // todo 언제 알림할지 파악해야 한다. => 가격 가져와서
         return "fail";
     }
 

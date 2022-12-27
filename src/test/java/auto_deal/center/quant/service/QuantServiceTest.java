@@ -66,7 +66,6 @@ class QuantServiceTest {
 
         //when
 
-
         //then
         Assertions.assertThat(trend_follow).isEqualTo("true");
 

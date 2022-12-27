@@ -1,6 +1,7 @@
 package auto_deal.center.quant.domain;
 
 import auto_deal.center.trade_detail.domain.TradeDetail;
+import auto_deal.center.trend_follow.domain.TrendFollow;
 import auto_deal.center.user.domain.Users;
 import lombok.*;
 
@@ -29,6 +30,11 @@ public class Quant {
     @Column
     private List<TradeDetail> tradeDetails = new ArrayList<>();
 
+    @OneToMany(mappedBy = "quant")
+    @Builder.Default
+    @Column
+    private List<TrendFollow> trendFollows = new ArrayList<>();
+
     @Column
     private LocalDateTime regdate;
 
@@ -45,8 +51,8 @@ public class Quant {
         }
     }
 
-    public void addTradeDetail(TradeDetail detail){
-        this.tradeDetails.add(detail);
+    public void addTrendFollow(TrendFollow detail){
+        this.trendFollows.add(detail);
 
         // 무한루프에 빠지지 않도록 체크
         if(detail.getQuant() != this){
