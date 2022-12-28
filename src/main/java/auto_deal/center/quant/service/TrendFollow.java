@@ -25,7 +25,7 @@ public class TrendFollow implements QuantType {
     private final CoinService coinService;
 
     @Override
-    public QuantModel get(String ticker){
+    public <T extends QuantModel> T get(String ticker, Class<T> cls){
         Boolean isBuy = Boolean.FALSE;
         CoinOhlcvRslt rslt = coinPrice.getOhlcv(ticker);
         QuantModel model = null;
@@ -36,7 +36,7 @@ public class TrendFollow implements QuantType {
             model = defineBuyOrNot(ticker, Price);
         }
 
-        return model;
+        return cls.cast(model);
     }
 
     @Override

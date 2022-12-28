@@ -4,6 +4,7 @@ import auto_deal.center.quant.model.QuantModel;
 import auto_deal.center.quant.service.QuantType;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.telegram.model.TelegramBotManager;
+import auto_deal.center.trade_detail.service.TradeDetailService;
 import auto_deal.center.trend_follow.domain.TrendFollow;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -22,21 +23,14 @@ public class ReturnMessage {
     public void process(Long chatId,TelegramBotMessage telegramBotMessage){
         SendMessage request = new SendMessage(chatId, telegramBotMessage.getMessage())
                 .disableWebPagePreview(true);
-        SendResponse sendResponse = telegramBotManager.getTelegramBot().execute(request);
-        //boolean ok = sendResponse.isOk();
-        //Message message = sendResponse.message();
+        telegramBotManager.getTelegramBot().execute(request);
     }
 
-    public void process(TrendFollow trendFollow){
-        String coinTicker = trendFollow.getCoinTicker();
-        String quantType = trendFollow.getQuant().getQuantType();
-        Long chatId = trendFollow.getQuant().getUsers().getChatId();
-
-        QuantModel quantModel = quantTypes.get(TelegramBotMessage.valueOf(TelegramBotMessage.class, quantType).getBeanNm()).get(coinTicker);
+    public void process(Long chatId,QuantModel quantModel){
 
         SendMessage request = new SendMessage(chatId, quantModel.toRsltStr())
                 .disableWebPagePreview(true);
-        SendResponse sendResponse = telegramBotManager.getTelegramBot().execute(request);
+        telegramBotManager.getTelegramBot().execute(request);
     }
 
     public void error(Long chatId){

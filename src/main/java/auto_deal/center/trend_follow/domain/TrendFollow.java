@@ -22,7 +22,7 @@ public class TrendFollow {
     private String coinTicker;
 
     @Column
-    private String isBuy;
+    private Boolean isBuy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Setter

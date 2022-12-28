@@ -38,7 +38,7 @@ public class MainProcessor {
                 TelegramBotMessage prevTalk = talkService.getPrevTalk(processedUser);
                 Quant quant = quantService.saveQuantByEnum(prevTalk, processedUser);
                 // 해당부분 dynamic으로 바꾸기
-                returnMessage.process( tradeDetailService.saveTradeDetail(chatId, text, quant, TrendFollow.class) );
+                returnMessage.process( chatId, tradeDetailService.processQuant(text, quant) );
             }else{
                 returnMessage.process(chatId, TelegramBotMessage.EMPTY);
             }

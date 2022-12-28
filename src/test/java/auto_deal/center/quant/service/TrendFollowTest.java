@@ -2,6 +2,7 @@ package auto_deal.center.quant.service;
 
 import auto_deal.center.coin.service.CoinRdbSyncManager;
 import auto_deal.center.quant.model.QuantModel;
+import auto_deal.center.quant.model.TrendFollowModel;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,10 +27,10 @@ class TrendFollowTest {
         String bitcoinTicker = "BTC";
 
         //when
-        QuantModel quantModel = trendFollow.get(bitcoinTicker);
+        TrendFollowModel model = trendFollow.get(bitcoinTicker, TrendFollowModel.class);
 
         //then
-        Assertions.assertThat(quantModel.toRsltStr()).isNotNull();
+        Assertions.assertThat(model.getTicker()).isEqualTo(bitcoinTicker);
     }
 
     @Test
