@@ -7,4 +7,6 @@ public interface CoinRdbSyncManager {
     void initCoinName();
 
     void init3MAvgPrice();
+
+    Boolean initNowPrices();
 }

@@ -17,5 +17,6 @@ public class InitSyncManager {
         coinRdbSyncManager.updateCoinToDb();
         coinRdbSyncManager.initCoinName();
         coinRdbSyncManager.init3MAvgPrice();
+        coinRdbSyncManager.initNowPrices();
     }
 }

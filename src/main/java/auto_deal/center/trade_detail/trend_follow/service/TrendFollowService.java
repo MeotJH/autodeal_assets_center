@@ -1,4 +1,4 @@
-package auto_deal.center.trend_follow.service;
+package auto_deal.center.trade_detail.trend_follow.service;
 
 import auto_deal.center.coin.domain.Coin;
 import auto_deal.center.coin.repository.CoinRepository;
@@ -8,8 +8,9 @@ import auto_deal.center.quant.model.TrendFollowModel;
 import auto_deal.center.quant.service.QuantType;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.trade_detail.service.TradeDetailService;
-import auto_deal.center.trend_follow.domain.TrendFollow;
-import auto_deal.center.trend_follow.repository.TrendFollowRepository;
+import auto_deal.center.trade_detail.trend_follow.repository.TrendFollowRepository;
+import auto_deal.center.trade_detail.trend_follow.domain.TrendFollow;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * DB 통신 위한 TrendFollow 구현체
+ * @param <T>
+ */
 @Service
 @RequiredArgsConstructor
 @Primary
@@ -43,6 +48,11 @@ public class TrendFollowService<T> implements TradeDetailService{
                     ,quant
                     );
         return trendFollowModel;
+    }
+
+    @Override
+    public TrendFollow saveOne(TrendFollow trendFollow){
+        return trendFollowRepository.save(trendFollow);
     }
 
     private TrendFollow saveTradeDetail(String ticker, Boolean isBuy, Quant quant){

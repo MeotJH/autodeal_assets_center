@@ -15,7 +15,7 @@ import java.util.List;
 class TrendFollowTest {
 
     @Autowired
-    public TrendFollow trendFollow;
+    public QuantTrendFollow trendFollow;
 
     @Autowired
     private CoinRdbSyncManager coinRdbSyncManager;

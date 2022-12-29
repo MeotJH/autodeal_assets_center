@@ -51,4 +51,15 @@ class CoinRdbSyncManagerTest {
         Assertions.assertThat(one.getKorea()).isEqualTo(rsltName);
     }
 
+    @Test
+    @DisplayName( " 현재 코인 가격 가져오는 테스트한다.")
+    void initNowPricesTest(){
+        //given
+        coinRdbSyncManager.initNowPrices();
+        //when
+
+        //then
+    }
+
+
 }

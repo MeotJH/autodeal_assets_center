@@ -8,8 +8,8 @@ import auto_deal.center.coin.repository.CoinRepository;
 import auto_deal.center.quant.model.QuantModel;
 import auto_deal.center.quant.model.TrendFollowModel;
 import auto_deal.center.quant.service.QuantType;
-import auto_deal.center.quant.service.TrendFollow;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +21,9 @@ public class CoinRdbSyncBithumbManager implements CoinRdbSyncManager {
 
     private final CoinPrice coinPrice;
     private final CoinRepository coinRepository;
-
     private final QuantType quantType;
+
+
     public void updateCoinToDb(){
         CoinApiRslt prices = coinPrice.getPrices();
         prices.getData().get("BTC").getMax_price();
@@ -92,6 +93,29 @@ public class CoinRdbSyncBithumbManager implements CoinRdbSyncManager {
             coinRepository.save(coinByTicker);
         }
         //TODO coinRdbSyncManger 와 QuantType 결과 간의 간극 어떻게 해결?!?!
+    }
+
+    @Override
+    public Boolean initNowPrices() {
+        JSONObject nowPrices = coinPrice.getNowPrices();
+
+        if(nowPrices.getString("status").equals("0000")){
+            JSONObject data = nowPrices.getJSONObject("data");
+            List<Coin> all = coinRepository.findAll();
+            for (Coin each: all) {
+                JSONObject coinData = data.getJSONObject(each.getTicker());
+                Double nowAskPrice = coinData
+                                    .getJSONArray("asks")
+                                    .getJSONObject(0)
+                                    .getDouble("price");
+                Coin afterUpdate = each.updateNowPrice(nowAskPrice);
+                coinRepository.save(afterUpdate);
+            }
+
+            return true;
+        }else{
+            return false;
+        }
     }
 
 

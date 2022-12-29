@@ -1,6 +1,6 @@
 package auto_deal.center.quant.domain;
 
-import auto_deal.center.trend_follow.domain.TrendFollow;
+import auto_deal.center.trade_detail.trend_follow.domain.TrendFollow;
 import auto_deal.center.user.domain.Users;
 import lombok.*;
 

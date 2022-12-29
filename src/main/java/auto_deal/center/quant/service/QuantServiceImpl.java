@@ -21,8 +21,6 @@ import java.util.Optional;
 public class QuantServiceImpl implements QuantService{
 
     private final QuantRepository quantRepository;
-    private final CoinService coinService;
-    private final Map<String,QuantType> quantTypes;
 
     @Override
     public Quant saveQuantByEnum(TelegramBotMessage tbm, Users users) {
@@ -36,15 +34,9 @@ public class QuantServiceImpl implements QuantService{
     }
 
     @Override
-    public String notice(String quantType){
-        TelegramBotMessage equals = TelegramBotMessage.valueOf(quantType);
-        QuantType quantTypeObj = quantTypes.get(equals.getBeanNm());
-        List<QuantModel> all = quantTypeObj.getAll();
-
-        // todo 언제 알림할지 파악해야 한다. => 가격 가져와서
-        return "fail";
+    public List<Quant> getAll(){
+        return quantRepository.findAll();
     }
-
 
 
     private Boolean isExist(TelegramBotMessage tbm, Users users) {

@@ -1,12 +1,11 @@
 package auto_deal.center.trend_follow.service;
 
 import auto_deal.center.quant.domain.Quant;
-import auto_deal.center.quant.model.QuantModel;
-import auto_deal.center.quant.model.TrendFollowModel;
 import auto_deal.center.quant.repository.QuantRepository;
 import auto_deal.center.telegram.message.TelegramBotMessage;
-import auto_deal.center.trend_follow.domain.TrendFollow;
-import auto_deal.center.trend_follow.repository.TrendFollowRepository;
+import auto_deal.center.trade_detail.trend_follow.domain.TrendFollow;
+import auto_deal.center.trade_detail.trend_follow.repository.TrendFollowRepository;
+import auto_deal.center.trade_detail.trend_follow.service.TrendFollowService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,9 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class TrendFollowServiceTest {

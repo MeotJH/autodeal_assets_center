@@ -33,6 +33,7 @@ public class Coin {
     private String fluctate_24H;
     private String fluctate_rate_24H;
     private Long three_month_avg_price;
+    private Double now_price;
 
     public Coin updateCoinData(CoinApiRslt.Coin coin){
         this.opening_price = coin.getOpening_price();
@@ -58,6 +59,11 @@ public class Coin {
 
     public Coin update3MAvgPrice(Long price){
         this.three_month_avg_price = price;
+        return this;
+    }
+
+    public Coin updateNowPrice(Double price){
+        this.now_price = price;
         return this;
     }
 

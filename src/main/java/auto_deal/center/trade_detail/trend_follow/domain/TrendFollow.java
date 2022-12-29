@@ -1,4 +1,4 @@
-package auto_deal.center.trend_follow.domain;
+package auto_deal.center.trade_detail.trend_follow.domain;
 
 import auto_deal.center.quant.domain.Quant;
 import lombok.*;
@@ -38,6 +38,10 @@ public class TrendFollow {
         if(!quant.getTrendFollows().contains(this)){
             quant.getTrendFollows().add(this);
         }
+    }
+
+    public void updateIsBuy(Boolean isBuy){
+        this.isBuy = isBuy;
     }
 
 }

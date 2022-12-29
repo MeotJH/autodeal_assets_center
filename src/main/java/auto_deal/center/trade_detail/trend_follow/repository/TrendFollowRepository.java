@@ -1,7 +1,7 @@
-package auto_deal.center.trend_follow.repository;
+package auto_deal.center.trade_detail.trend_follow.repository;
 
 import auto_deal.center.quant.domain.Quant;
-import auto_deal.center.trend_follow.domain.TrendFollow;
+import auto_deal.center.trade_detail.trend_follow.domain.TrendFollow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -47,6 +47,11 @@ public class CoinPriceBithumb implements CoinPrice {
         return coinApiRslt;
     }
 
+    /**
+     * ohlcv = 당일 시가, 고가, 저가, 종가, 거래량에 대한 데이터
+     * @param ticker
+     * @return ohlcv
+     */
     @Override
     public CoinOhlcvRslt getOhlcv(String ticker) {
         String nowPricePath = "/public/candlestick/"+ticker+"_KRW/24h";

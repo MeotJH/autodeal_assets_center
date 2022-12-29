@@ -4,8 +4,6 @@ import auto_deal.center.quant.model.QuantModel;
 import auto_deal.center.quant.service.QuantType;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.telegram.model.TelegramBotManager;
-import auto_deal.center.trade_detail.service.TradeDetailService;
-import auto_deal.center.trend_follow.domain.TrendFollow;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
@@ -18,7 +16,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReturnMessage {
     private final TelegramBotManager telegramBotManager;
-    private final Map<String,QuantType> quantTypes;
 
     public void process(Long chatId,TelegramBotMessage telegramBotMessage){
         SendMessage request = new SendMessage(chatId, telegramBotMessage.getMessage())
@@ -26,11 +23,11 @@ public class ReturnMessage {
         telegramBotManager.getTelegramBot().execute(request);
     }
 
-    public void process(Long chatId,QuantModel quantModel){
+    public SendResponse process(Long chatId,QuantModel quantModel){
 
         SendMessage request = new SendMessage(chatId, quantModel.toRsltStr())
                 .disableWebPagePreview(true);
-        telegramBotManager.getTelegramBot().execute(request);
+        return telegramBotManager.getTelegramBot().execute(request);
     }
 
     public void error(Long chatId){
