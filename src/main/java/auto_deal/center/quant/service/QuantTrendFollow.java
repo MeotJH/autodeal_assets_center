@@ -11,6 +11,7 @@ import auto_deal.center.quant.model.TrendFollowModel;
 import auto_deal.center.telegram.message.TelegramBotMessage;
 import auto_deal.center.trade_detail.service.TradeDetailService;
 import auto_deal.center.trade_detail.trend_follow.domain.TrendFollow;
+import auto_deal.center.trade_detail.trend_follow.repository.TrendFollowRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -32,8 +33,7 @@ public class QuantTrendFollow implements QuantType {
     private final CoinPrice coinPrice;
     private final CoinService coinService;
     private final QuantService quantService;
-
-    private final TradeDetailService tradeDetailService;
+    private final TrendFollowRepository trendFollowRepository;
 
     @Override
     public <T extends QuantModel> T get(String ticker, Class<T> cls){
@@ -162,7 +162,7 @@ public class QuantTrendFollow implements QuantType {
 
     private void saveTrendFollow(TrendFollow inEach, Boolean isBuy) {
         inEach.updateIsBuy(isBuy);
-        tradeDetailService.saveOne(inEach);
+        trendFollowRepository.save(inEach);
     }
 
 }
