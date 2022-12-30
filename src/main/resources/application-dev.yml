@@ -1,0 +1,28 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: "jdbc:h2:tcp://localhost/~/auto_deal"
+    username: rlawlsgks
+    password: rlawlsgks
+
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+
+telegram:
+  bot: "5722974705:AAF60xPxcmm_PgxjD2bsPWKUoYl5ftu3V1c"
+
+#telegram:
+#  bot:
+#    quant_two_prd: "5692669704:AAH4N_20QLZHskRN_cnDXDSWaFqHTe1y3VA"
+#    quant_two_dev: "5722974705:AAF60xPxcmm_PgxjD2bsPWKUoYl5ftu3V1c"
+#    quant_two_hyun: "5973588170:AAFjTa06Nj4x8_qPYCeHDLvuZ3SGbLYhoNg"

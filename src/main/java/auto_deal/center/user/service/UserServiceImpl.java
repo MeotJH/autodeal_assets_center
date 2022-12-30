@@ -1,8 +1,5 @@
 package auto_deal.center.user.service;
 
-import auto_deal.center.quant.service.QuantService;
-import auto_deal.center.talk.domain.Talk;
-import auto_deal.center.talk.service.TalkService;
 import auto_deal.center.user.domain.Users;
 import auto_deal.center.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,61 +15,53 @@ import java.time.LocalDateTime;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final QuantService quantService;
-    private final TalkService talkService;
 
     @Override
-    public Boolean Process(Long chatId, String text) {
+    public Users process(Long chatId, String text) {
         return this.saveUserTalk(chatId, text);
     }
 
-    // 이 메소드에서 연관관계 주인이 왜 중요한지 알아냈다.
-    private boolean saveUserTalk(Long chatId, String text){
-        Talk talk = talkService.saveTalk(text);
-        // TODO 저장 전에 유저 존재하는지 확인하는 코드
-        if( isUserExist(chatId) ){
-            saveUserRequst(chatId, talk);
+    @Override
+    public Boolean isUserExist(Long chatId) {
+        Boolean exist = false;
+        Optional<Users> userDefine = Optional.ofNullable(userRepository.findUserOneByChatId(chatId));
+        if(userDefine.isPresent()){
+            exist = true;
         }else{
-            saveNewUser(chatId, talk);
+            exist = false;
         }
-        return Boolean.TRUE;
+        return exist;
     }
-    
-    // chat 로 유저 존재하는지 bool값
-    private Boolean isUserExist(Long chatId){
-        Users users = userRepository.findUserOneByChatId(chatId);
-        if(users != null){
-            return true;
+
+    private Users saveUserTalk(Long chatId, String text){
+        Users users = new Users();
+        if( isUserExist(chatId) ){
+            users = saveUserRequst(chatId, text);
         }else{
-            return false;
+            users = saveNewUser(chatId, text);
         }
+        return users;
     }
     
     // 존재하던 유저라면 응답을 업데이트한다
-    private void saveUserRequst(Long chatId, Talk talk){
-        Users one = userRepository.findUserOneByChatId(chatId);
-        if( one != null){
-            one.changRegDate();
-            one.changeTalk(talk);
-            Users save = userRepository.save(one);
-            quantService.saveQuantByEnum(talk.getContent(),save);
-        }
+    private Users saveUserRequst(Long chatId, String text){
+        Users one = Optional.ofNullable(userRepository.findUserOneByChatId(chatId)).orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+        one.changRegDate();
+        return userRepository.save(one);
     }
     
     // 새로운 유저라면 저장한다
-    private void saveNewUser(Long chatId, Talk talk) {
+    private Users saveNewUser(Long chatId, String text) {
         // one을 저장하고
         Users userSaved = userRepository.save(
                 Users
-                        .builder()
-                        .chatId(chatId)
-                        .talk(talk)
-                        .regDate(LocalDateTime.now())
-                        .build()
+                    .builder()
+                    .chatId(chatId)
+                    .regDate(LocalDateTime.now())
+                    .build()
         );
 
-        // fk의 주인인 Many를 저장하면 자동으로
-        quantService.saveQuantByEnum(talk.getContent(),userSaved);
+        return userSaved;
     }
 
 }

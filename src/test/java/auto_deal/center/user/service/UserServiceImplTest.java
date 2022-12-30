@@ -21,59 +21,7 @@ class UserServiceImplTest {
     @Autowired
     public UserRepository userRepository;
     
-    @Test
-    @DisplayName( "유저 프로세스 인서트테스트한다.")
-    @Transactional(rollbackFor = Exception.class)
-    void processTest(){
-        //given
-        Long chatId = 1212312312L;
-        String text = TelegramBotMessage.BULL_MARKET.getCodeEn();
 
-        //when
-        userService.Process(chatId,text);
-        Users userOne = userRepository.findUserOneByChatId(chatId);
-
-        //then
-        Assertions.assertThat(userOne.getQuants().get(0).getQuantType()).isEqualTo(TelegramBotMessage.BULL_MARKET.toString());
-
-    }
-
-    @Test
-    @DisplayName( "유저 프로세스 인서트테스트한다.")
-    @Transactional(rollbackFor = Exception.class)
-    void processTestNoEnumType(){
-        //given
-        Long chatId = 1212312312L;
-        String text = "안녕하세요?";
-
-        //when
-        userService.Process(chatId,text);
-        Users userOne = userRepository.findUserOneByChatId(chatId);
-
-        //then
-        Assertions.assertThat(userOne.getQuants().get(0).getQuantType()).isNotEqualTo(text);
-
-    }
-
-    @Test
-    @DisplayName( "유저 프로세스 chatId같은 사람 update 해야된다.")
-    @Transactional(rollbackFor = Exception.class)
-    void userChatIdEquasBeUpdated(){
-        //given
-        Long chatId = 1212312312L;
-        String BULL_MARKET = TelegramBotMessage.BULL_MARKET.getCodeEn();
-        String VOLA_BREAK = TelegramBotMessage.VOLA_BREAK.getCodeEn();
-
-        //when
-        userService.Process(chatId,BULL_MARKET);
-        userService.Process(chatId,VOLA_BREAK);
-
-        Users userOne = userRepository.findUserOneByChatId(chatId);
-
-        //then
-        Assertions.assertThat(userOne.getQuants().get(1).getQuantType()).isEqualTo(TelegramBotMessage.VOLA_BREAK.toString());
-
-    }
     
 
 }

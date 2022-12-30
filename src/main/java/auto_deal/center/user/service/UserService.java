@@ -1,8 +1,13 @@
 package auto_deal.center.user.service;
 
-import org.springframework.stereotype.Service;
+import auto_deal.center.cmm.model.CommonModel;
+import auto_deal.center.user.domain.Users;
+
+import java.util.Optional;
 
 public interface UserService {
 
-    Boolean Process(Long chatId, String text);
+    Users process(Long chatId, String text);
+
+    Boolean isUserExist(Long chatId);
 }
