@@ -71,13 +71,11 @@ public class QuantTrendFollow implements QuantType {
      */
     public List<NoticeMessageModel> notice(){
         List<NoticeMessageModel> noticeMessageModels = new ArrayList<>();
-        for (Quant each: quantService.getAll()) {
+        for (Quant each: quantService.getAll(TelegramBotMessage.TREND_FOLLOW)) {
 
             NoticeMessageModel.NoticeMessageModelBuilder noticeMessageModelBuilder = NoticeMessageModel.builder().chatId(each.getUsers().getChatId());
-            if( each.getQuantType().equals(TelegramBotMessage.TREND_FOLLOW.name()) ){
-                List<QuantModel> noticeModels = addNoticeModels(each);
-                noticeMessageModels.add( noticeMessageModelBuilder.quantModels(noticeModels).build() );
-            }
+            List<QuantModel> noticeModels = addNoticeModels(each);
+            noticeMessageModels.add( noticeMessageModelBuilder.quantModels(noticeModels).build() );
 
         }
         return noticeMessageModels;
@@ -155,7 +153,6 @@ public class QuantTrendFollow implements QuantType {
                 saveTrendFollow(inEach, isBuy);
 
             }
-
         }
         return quantModels;
     }

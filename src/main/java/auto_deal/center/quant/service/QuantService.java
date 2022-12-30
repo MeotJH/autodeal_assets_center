@@ -10,4 +10,6 @@ public interface QuantService {
     Quant saveQuantByEnum(TelegramBotMessage tbm,Users user);
 
     List<Quant> getAll();
+
+    List<Quant> getAll(TelegramBotMessage telegramBotMessage);
 }

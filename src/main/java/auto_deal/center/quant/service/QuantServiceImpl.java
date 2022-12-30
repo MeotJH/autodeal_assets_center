@@ -38,6 +38,11 @@ public class QuantServiceImpl implements QuantService{
         return quantRepository.findAll();
     }
 
+    @Override
+    public List<Quant> getAll(TelegramBotMessage telegramBotMessage) {
+        return quantRepository.findByQuantType(telegramBotMessage.name());
+    }
+
 
     private Boolean isExist(TelegramBotMessage tbm, Users users) {
         Optional<Quant> opt = Optional.ofNullable(quantRepository.findByQuantTypeAndUsers(tbm.name(),users));

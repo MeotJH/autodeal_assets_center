@@ -56,7 +56,8 @@ public class TrendFollowService<T> implements TradeDetailService{
     }
 
     private TrendFollow saveTradeDetail(String ticker, Boolean isBuy, Quant quant){
-
+        
+        // 중복되면 넣지 않기 위해서
         Optional<TrendFollow> byCoinTicker = Optional.ofNullable(trendFollowRepository.findByCoinTickerAndQuant(ticker,quant));
         if(byCoinTicker.isPresent()){
             return trendFollowRepository.save(byCoinTicker.get());
