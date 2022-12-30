@@ -56,6 +56,12 @@ public class TrendFollowService<T> implements TradeDetailService{
     }
 
     private TrendFollow saveTradeDetail(String ticker, Boolean isBuy, Quant quant){
+
+        Optional<TrendFollow> byCoinTicker = Optional.ofNullable(trendFollowRepository.findByCoinTickerAndQuant(ticker,quant));
+        if(byCoinTicker.isPresent()){
+            return trendFollowRepository.save(byCoinTicker.get());
+        }
+
         // 한국어로 DB에 init되어있는 코인객체를 가져와 TB_TRADE_DETAIL 에 넣어준다.
         TrendFollow tradeDeatail = TrendFollow.builder()
                 .coinTicker(ticker)
