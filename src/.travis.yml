@@ -1,0 +1,22 @@
+language: java
+jdk:
+  - openjdk11
+
+branches:
+  only:
+    - master
+
+#gradle lib cache
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+#git master push after code
+script: "./gradlew clean build"
+
+#notice to my mail
+notifications:
+  email:
+    recipients:
+      - 'mallangyi@naver.com'

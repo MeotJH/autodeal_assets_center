@@ -49,6 +49,20 @@ class CoinPriceBithumbTest {
         Assertions.assertThat(today.getDayOfWeek()).isEqualTo( LocalDateTime.now().getDayOfWeek() );
     }
 
+    @Test
+    @DisplayName("현재 모든 코인들 가격을 가져와야 한다")
+    void getNowPricesTest(){
+        //given
+        coinPrice.get
+
+        //when
+        String todayTimestampStr = prices.getData().get(prices.getData().size()-1).get(0);
+        Long todayTimestamp = Long.parseLong(todayTimestampStr);
+        LocalDateTime today = LocalDateTime.ofInstant(Instant.ofEpochMilli(todayTimestamp), TimeZone.getDefault().toZoneId());
+        //then
+        Assertions.assertThat(today.getDayOfWeek()).isEqualTo( LocalDateTime.now().getDayOfWeek() );
+    }
+
 
     
 }

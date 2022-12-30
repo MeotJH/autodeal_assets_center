@@ -38,6 +38,7 @@ public class QuantServiceImpl implements QuantService{
             Quant quantOne = Quant.builder().quantType(quantType.toString()).regdate(LocalDateTime.now()).build();
             quantOne.setUser(userOne);
             quantRepository.save(quantOne);
+            //TODO 책에 따르면 save까지 해결하는게 맞다는거지??
         }
     }
 }
