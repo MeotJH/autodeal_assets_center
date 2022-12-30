@@ -4,7 +4,7 @@ jdk:
 
 branches:
   only:
-    - master
+    - main
 
 #gradle lib cache
 cache:
