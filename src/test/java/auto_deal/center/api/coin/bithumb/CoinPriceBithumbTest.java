@@ -28,7 +28,7 @@ class CoinPriceBithumbTest {
     @DisplayName("코인 현재가들 가져와야 한다")
     void getPrice(){
         //given
-        CoinApiRslt prices = coinPrice.getPrices();
+        CoinApiRslt prices = coinPrice.getPriceData();
 
         //when
         boolean isBTC = prices.getData().containsKey("BTC");

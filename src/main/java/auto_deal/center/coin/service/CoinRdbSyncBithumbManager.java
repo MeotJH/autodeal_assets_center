@@ -25,7 +25,7 @@ public class CoinRdbSyncBithumbManager implements CoinRdbSyncManager {
 
 
     public void updateCoinToDb(){
-        CoinApiRslt prices = coinPrice.getPrices();
+        CoinApiRslt prices = coinPrice.getPriceData();
         prices.getData().get("BTC").getMax_price();
 
         // DB에 값을 넣는다.

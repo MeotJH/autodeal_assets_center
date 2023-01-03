@@ -24,8 +24,7 @@ public class TalkService {
     private final CoinRepository coinRepository;
 
     public TelegramBotMessage saveTalk(Users user, String text){
-
-        Optional<Coin> coinByTicker = Optional.ofNullable(coinRepository.findCoinByTicker(text));
+        Optional<Coin> coinByTicker = coinRepository.findOptionalCoinByTicker(text);
 
         if( TelegramBotMessage.getEquals(text) != TelegramBotMessage.EMPTY && !coinByTicker.isPresent() ){
             Talk talkOne = Talk.builder().content(text).regDate(LocalDateTime.now()).build();

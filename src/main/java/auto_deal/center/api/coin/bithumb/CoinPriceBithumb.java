@@ -27,13 +27,19 @@ public class CoinPriceBithumb implements CoinPrice {
 
     private RestTemplate restTemplate;
 
-    private CoinPriceBithumb(){
+    private org.api.bithumb.CoinPriceBithumb coinPriceBithumb;
+
+    public CoinPriceBithumb() throws IOException {
         restTemplate = new RestTemplate();
+        this.coinPriceBithumb = new org.api.bithumb.CoinPriceBithumb();
     }
 
-    // 현재 코인의 모든 값을 받아온다.
+    /**
+     * 현재 코인의 모든 값을 받아온다.
+     * @return
+     */
     @Override
-    public CoinApiRslt getPrices() {
+    public CoinApiRslt getPriceData() {
         String nowPricePath = "/public/ticker/ALL_KRW";
         String coinNowPriceUrl =  bithumbUrl + nowPricePath;
 
@@ -63,6 +69,10 @@ public class CoinPriceBithumb implements CoinPrice {
         return response.getBody();
     }
 
+    /**
+     * 모든 가격들 가져오기
+     * @return
+     */
     @Override
     public JSONObject getNowPrices(){
 
@@ -118,7 +128,6 @@ public class CoinPriceBithumb implements CoinPrice {
 
         return new JSONObject( client.newCall(request).execute().body().string() );
     }
-
 
     @NotNull
     private String getNowPriceUrl(String ticker) {
