@@ -19,3 +19,8 @@ spring:
 
 telegram:
   bot: "5692669704:AAH4N_20QLZHskRN_cnDXDSWaFqHTe1y3VA"
+
+
+logging:
+  level:
+    root: info
