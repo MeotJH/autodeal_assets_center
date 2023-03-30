@@ -41,7 +41,7 @@ public class MainProcessor {
             if( isExistedMessage(equals) ){ // enum이다
                 TelegramBotMessage message = talkService.saveTalk(processedUser, text);
                 quantService.saveQuantByEnum(message, processedUser);
-                returnMessage.process( chatId, message);
+                returnMessage.process( chatId, message );
             }else if( isExistedCoin(text) ){ // coin 이다
                 TelegramBotMessage prevTalk = talkService.getPrevTalk(processedUser);
                 Quant quant = quantService.saveQuantByEnum(prevTalk, processedUser);
