@@ -7,7 +7,7 @@
         <property name="LOGS_PATH" value="./logs" />
     </springProfile>
     <springProfile name="prod">
-        <property name="LOGS_PATH" value="./logs" />
+        <property name="LOGS_PATH" value="/home/ec2-user/logs" />
     </springProfile>
 
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
