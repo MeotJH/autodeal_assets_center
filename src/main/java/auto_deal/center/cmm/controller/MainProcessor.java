@@ -38,17 +38,16 @@ public class MainProcessor {
         if(exist){
 
             TelegramBotMessage equals = TelegramBotMessage.getEquals(text);
-            if( equals != TelegramBotMessage.EMPTY ){ // enum이다
+            if( isExistedMessage(equals) ){ // enum이다
                 TelegramBotMessage message = talkService.saveTalk(processedUser, text);
                 quantService.saveQuantByEnum(message, processedUser);
-                returnMessage.process(chatId,message);
-            }else if( coinService.isExist(text) ){ // coin 이다
+                returnMessage.process( chatId, message);
+            }else if( isExistedCoin(text) ){ // coin 이다
                 TelegramBotMessage prevTalk = talkService.getPrevTalk(processedUser);
                 Quant quant = quantService.saveQuantByEnum(prevTalk, processedUser);
-                // 해당부분 dynamic으로 바꾸기
                 returnMessage.process( chatId, tradeDetailService.processQuant(text, quant) );
             }else{
-                returnMessage.process(chatId, TelegramBotMessage.EMPTY);
+                returnMessage.process( chatId, TelegramBotMessage.EMPTY);
             }
 
         }else{
@@ -63,5 +62,13 @@ public class MainProcessor {
                 returnMessage.process(each.getChatId(), inEach);
             }
         }
+    }
+
+    private boolean isExistedMessage(TelegramBotMessage equals) {
+        return equals != TelegramBotMessage.EMPTY;
+    }
+
+    private Boolean isExistedCoin(String text) {
+        return coinService.isExist(text);
     }
 }

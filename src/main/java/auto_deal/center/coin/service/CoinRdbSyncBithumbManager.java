@@ -92,7 +92,6 @@ public class CoinRdbSyncBithumbManager implements CoinRdbSyncManager {
             coinByTicker.update3MAvgPrice(cast.getTargetPrice());
             coinRepository.save(coinByTicker);
         }
-        //TODO coinRdbSyncManger 와 QuantType 결과 간의 간극 어떻게 해결?!?!
     }
 
     @Override

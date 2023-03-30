@@ -138,4 +138,5 @@ public class CoinPriceBithumb implements CoinPrice {
     private String getNowPriceUrl() {
         return bithumbUrl + "/public/orderbook/ALL_KRW";
     }
+
 }
