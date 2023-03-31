@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TimeZone;
 
 @Slf4j
 @Service
@@ -26,8 +31,7 @@ public class MonthCoinPrice implements MonthPrice {
             Boolean aBoolean = parseDateToMonth(jsonObject);
 
         }catch (Exception e){
-            e.printStackTrace();
-            //log.info(e.getMessage());
+            log.error(e.getMessage());
         }finally {
             return jsonObject;
         }
@@ -37,6 +41,34 @@ public class MonthCoinPrice implements MonthPrice {
 
     private Boolean parseDateToMonth(JSONObject jsonObject) {
         JSONArray datas = jsonObject.getJSONArray("data");
+
+        HashMap<String, ArrayList<JSONArray>> map = new HashMap<>();
+
+        for (int i = 0; i < datas.length(); i++) {
+            JSONArray jsonArray = datas.getJSONArray(i);
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(jsonArray.getLong(0)), TimeZone.getDefault().toZoneId());
+            Integer year = localDateTime.getYear();
+            Integer nowYear = LocalDateTime.now().getYear();
+
+            if( nowYear.equals(year) || nowYear.equals(year+1)){
+                Integer dayOfMonth = localDateTime.getMonthValue();
+                String yearMonth = Integer.toString(year) + Integer.toString(dayOfMonth);
+                if(map.containsKey(yearMonth)){
+                    ArrayList<JSONArray> mapInArr = map.get(yearMonth);
+                    mapInArr.add(jsonArray);
+                    map.put(yearMonth, mapInArr);
+                }else{
+                    ArrayList<JSONArray> mapInArr = new ArrayList<>();
+                    mapInArr.add(jsonArray);
+                    map.put(yearMonth, mapInArr);
+                }
+
+            }
+
+        }
+        int a = 0;
+
+
         int lastIdx =datas.length() -1;
 
         Double startPrices = 0.0;
