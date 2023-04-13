@@ -1,10 +1,8 @@
 package auto_deal.center.api.coin;
 
-import org.json.JSONObject;
-
 import java.util.Map;
 
-public interface MonthPrice {
+public interface SixMonthSection {
 
     Map<String,Double> get(String ticker);
 }

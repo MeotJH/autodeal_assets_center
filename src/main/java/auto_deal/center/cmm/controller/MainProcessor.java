@@ -29,8 +29,7 @@ public class MainProcessor {
     private final ReturnMessage returnMessage;
     private final QuantService quantService;
     private final CoinServiceImpl coinService;
-    private final TradeDetailService tradeDetailService;
-
+    private final Map<String, TradeDetailService> tradeDetailServices;
     private final Map<String, QuantType> quantTypes;
     public void process(Long chatId, String text){
         Boolean exist = userService.isUserExist(chatId);
@@ -45,7 +44,11 @@ public class MainProcessor {
             }else if( isExistedCoin(text) ){ // coin 이다
                 TelegramBotMessage prevTalk = talkService.getPrevTalk(processedUser);
                 Quant quant = quantService.saveQuantByEnum(prevTalk, processedUser);
-                returnMessage.process( chatId, tradeDetailService.processQuant(text, quant) );
+                
+                //TODO 공통코드 테이블 만들어서 해당부분 리팩토링 해야함
+                String tempStr = prevTalk.name().equals("STOP_LOSS") ? "stopLossService" : "trendFollowService";
+
+                returnMessage.process( chatId, tradeDetailServices.get(tempStr).processQuant(text, quant) );
             }else{
                 returnMessage.process( chatId, TelegramBotMessage.EMPTY);
             }

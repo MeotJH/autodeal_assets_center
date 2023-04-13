@@ -1,6 +1,6 @@
 package auto_deal.center.api.coin.bithumb;
 
-import auto_deal.center.api.coin.MonthPrice;
+import auto_deal.center.api.coin.SixMonthSection;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,7 +20,7 @@ import java.util.TimeZone;
 
 @Slf4j
 @Service
-public class MonthCoinPrice implements MonthPrice {
+public class CoinPriceSixMonthSection implements SixMonthSection {
 
     @Value("${bithumb.url}")
     private String bithumbUrl;

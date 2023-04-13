@@ -1,5 +1,6 @@
 package auto_deal.center.quant.domain;
 
+import auto_deal.center.trade_detail.stop_loss.domain.StopLoss;
 import auto_deal.center.trade_detail.trend_follow.domain.TrendFollow;
 import auto_deal.center.user.domain.Users;
 import lombok.*;
@@ -28,6 +29,11 @@ public class Quant {
     @Builder.Default
     @Column
     private List<TrendFollow> trendFollows = new ArrayList<>();
+
+    @OneToMany(mappedBy = "quant")
+    @Builder.Default
+    @Column
+    private List<StopLoss> stopLosses = new ArrayList<>();
 
     @Column
     private LocalDateTime regdate;

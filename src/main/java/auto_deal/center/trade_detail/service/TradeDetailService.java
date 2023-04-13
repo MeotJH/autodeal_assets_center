@@ -7,6 +7,4 @@ import auto_deal.center.trade_detail.trend_follow.domain.TrendFollow;
 public interface TradeDetailService {
 
     QuantModel processQuant(String text, Quant quant);
-
-    TrendFollow saveOne(TrendFollow trendFollow);
 }

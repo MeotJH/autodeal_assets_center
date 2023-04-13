@@ -8,12 +8,13 @@ public enum TelegramBotMessage {
     START_MESSAGE("퀀트투자 정보 소통 봇! \n" +
             "/help 사용 방법을 조회합니다. \n" +
             "/추세, /trend 추세 투자법 기능 설정합니다. \n" +
+            "/손절매, /stoploss 손절매 투자전략 기능 설정합니다. \n" +
             "/은퇴자금, /retire 추세 투자법 기능 설정합니다. \n"
             ,"/start", "/help"),
 
-    BULL_MARKET("상승장 전략 기능입니다. \n" +
+    STOP_LOSS("손절매 투자전략 기능입니다. \n" +
             "원하는 코인명을 풀네임으로 입력해주세요 \n" +
-            "예) 비트코인, 이더리움...", "/bull", "/상승장"),
+            "예) 비트코인, 이더리움...", "/stoploss", "/손절매","quantStopLoss"),
 
     TREND_FOLLOW("추세 투자법 기능입니다. \n" +
             "원하는 코인명을 풀네임으로 입력해 주세요 \n" +

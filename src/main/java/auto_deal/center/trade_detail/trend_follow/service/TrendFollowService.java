@@ -42,7 +42,7 @@ public class TrendFollowService<T> implements TradeDetailService{
                                                       .get(coin.getTicker(),TrendFollowModel.class);
 
         //trendFollow 저장
-        saveTradeDetail(
+        saveTrendFollow(
                     coin.getTicker()
                     ,trendFollowModel.getIsBuy()
                     ,quant
@@ -50,12 +50,8 @@ public class TrendFollowService<T> implements TradeDetailService{
         return trendFollowModel;
     }
 
-    @Override
-    public TrendFollow saveOne(TrendFollow trendFollow){
-        return trendFollowRepository.save(trendFollow);
-    }
 
-    private TrendFollow saveTradeDetail(String ticker, Boolean isBuy, Quant quant){
+    private TrendFollow saveTrendFollow(String ticker, Boolean isBuy, Quant quant){
         
         // 중복되면 넣지 않기 위해서
         Optional<TrendFollow> byCoinTicker = Optional.ofNullable(trendFollowRepository.findByCoinTickerAndQuant(ticker,quant));
@@ -63,14 +59,14 @@ public class TrendFollowService<T> implements TradeDetailService{
             return trendFollowRepository.save(byCoinTicker.get());
         }
 
-        // 한국어로 DB에 init되어있는 코인객체를 가져와 TB_TRADE_DETAIL 에 넣어준다.
-        TrendFollow tradeDeatail = TrendFollow.builder()
+        // 한국어로 DB에 init되어있는 코인객체를 가져와 TB_TREND_FOLLOW 에 넣어준다.
+        TrendFollow trendFollow = TrendFollow.builder()
                 .coinTicker(ticker)
                 .regdate(LocalDateTime.now())
                 .isBuy(isBuy)
                 .build();
 
-        tradeDeatail.setQuant(quant);
-        return trendFollowRepository.save(tradeDeatail);
+        trendFollow.setQuant(quant);
+        return trendFollowRepository.save(trendFollow);
     }
 }
