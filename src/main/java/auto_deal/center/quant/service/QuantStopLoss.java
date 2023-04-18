@@ -6,6 +6,7 @@ import auto_deal.center.cmm.model.NoticeMessageModel;
 import auto_deal.center.quant.model.QuantModel;
 import auto_deal.center.quant.model.StopLossModel;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,6 +51,8 @@ public class QuantStopLoss implements QuantType{
     }
 
     private double getNowPrice(String ticker) {
+        JSONObject nowPrice = coinPrice
+                .getNowPrice(ticker);
         return Math.round(coinPrice
                 .getNowPrice(ticker)
                 .getJSONObject("data")
