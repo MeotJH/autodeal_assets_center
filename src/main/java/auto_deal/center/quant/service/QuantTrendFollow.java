@@ -52,6 +52,7 @@ public class QuantTrendFollow implements QuantType {
 
     @Override
     public List<QuantModel> getAll(){
+        //TODO 없는 코인은 통신 안하게 하는 로직 필요하다.
         List<QuantModel> models = new ArrayList<>();
         QuantModel model = null;
         for (Coin each : coinService.getAllTicker()) {
@@ -69,6 +70,7 @@ public class QuantTrendFollow implements QuantType {
     /**
      * 해당 퀀트에 해당하는 알림 있는지 확인
      */
+    @Override
     public List<NoticeMessageModel> notice(){
         List<NoticeMessageModel> noticeMessageModels = new ArrayList<>();
         for (Quant each: quantService.getAll(TelegramBotMessage.TREND_FOLLOW)) {
@@ -141,12 +143,12 @@ public class QuantTrendFollow implements QuantType {
             if(isBuy != inEach.getIsBuy()){
                 // 지금 bool값이랑 이전 bool값이랑 다르면 노티스
                 TrendFollowModel model = TrendFollowModel
-                        .builder()
-                        .isBuy(isBuy)
-                        .nowPrice((long) Math.floor(nowPrice))
-                        .targetPrice(threeMonthAvgPrice)
-                        .ticker(inEach.getCoinTicker())
-                        .build();
+                                                .builder()
+                                                .isBuy(isBuy)
+                                                .nowPrice((long) Math.floor(nowPrice))
+                                                .targetPrice(threeMonthAvgPrice)
+                                                .ticker(inEach.getCoinTicker())
+                                                .build();
                 quantModels.add(model);
                 
                 // 매도 매수 값이 과거와 바뀌었으면 재설정
@@ -155,6 +157,8 @@ public class QuantTrendFollow implements QuantType {
             }
         }
         return quantModels;
+        // TODO 현재 만든 메소드 테스트케이스 만들기
+        // TODO 1달에 1번 initPrice 초기화 및 cnt 초기화 작성해야함
     }
 
     private void saveTrendFollow(TrendFollow inEach, Boolean isBuy) {

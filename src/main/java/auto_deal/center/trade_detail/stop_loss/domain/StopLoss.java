@@ -19,13 +19,24 @@ public class StopLoss {
     private Long id;
 
     @Column
+    @Getter
     private String coinTicker;
 
     @Column
+    @Getter
     private Double initPrice;
 
     @Column
+    @Getter
     private Double stopLossPercent;
+
+    @Column
+    @Getter
+    private Integer count;
+
+    @Column
+    @Getter
+    private String resultCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="QUANT_ID")
@@ -41,6 +52,10 @@ public class StopLoss {
         if(!quant.getStopLosses().contains(this)){
             quant.getStopLosses().add(this);
         }
+    }
+
+    public void updateCount(Integer count){
+        this.count = count;
     }
 
     public void updateStopLossPercent(Double stopLossPercent){

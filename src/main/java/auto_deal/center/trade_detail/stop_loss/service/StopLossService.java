@@ -51,17 +51,23 @@ public class StopLossService implements TradeDetailService {
             return stopLossRepository.save(byCoinTicker.get());
         }
 
-        // 한국어로 DB에 init되어있는 코인객체를 가져와 TB_TREND_FOLLOW 에 넣어준다.
+        // 한국어로 DB에 init되어있는 코인객체를 가져와 TB_Sto 에 넣어준다.
         StopLoss stopLoss = StopLoss.builder()
                                     .coinTicker(ticker)
                                     .initPrice(stopLossModel.getPrice())
                                     .stopLossPercent(stopLossModel.getStopLossPercent())
                                     .regdate(LocalDateTime.now())
+                                    .resultCode(stopLossModel.getResult())
+                                    .count(1)
                                     .build();
 
         stopLoss.setQuant(quant);
         return stopLossRepository.save(stopLoss);
 
+    }
+
+    private boolean isResultSame(StopLossModel stopLossModel, StopLoss stopLoss) {
+        return stopLoss.getResultCode().equals(stopLossModel.getResult());
     }
 
 

@@ -14,7 +14,10 @@ public class QuantCaller {
     //콜백함수
     public void isCalled(Boolean check){
         if(check){
+
+            //now price 가 init이 되었다면 메세지를 보내주는 절차를 실행해야 한다.
             mainProcessor.returnProcess(TelegramBotMessage.TREND_FOLLOW);
+            mainProcessor.returnProcess(TelegramBotMessage.STOP_LOSS);
         }
     }
 
