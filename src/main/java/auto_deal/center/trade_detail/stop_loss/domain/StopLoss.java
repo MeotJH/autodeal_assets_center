@@ -24,6 +24,10 @@ public class StopLoss {
 
     @Column
     @Getter
+    private Double dayOfMonthPrice;
+
+    @Column
+    @Getter
     private Double initPrice;
 
     @Column

@@ -10,7 +10,8 @@ import java.text.DecimalFormat;
 public class StopLossModel implements QuantModel{
 
     private String ticker;
-    private Double price;
+    private Double nowPrice;
+    private Double dayOfMonthPrice;
     private Double stopLossPercent;
     private Double stopLossPrice;
     private String result;
@@ -21,11 +22,12 @@ public class StopLossModel implements QuantModel{
     public String toRsltStr() {
 
         DecimalFormat formatter = new DecimalFormat("#,###,###.0");
-        String nowPriceStr = formatter.format(price); // => 이번달 시가로 바꾸어야함
+        String dayOfMonthPriceStr = formatter.format(dayOfMonthPrice); // => 이번달 시가로 바꾸어야함
+        String nowPriceStr = formatter.format(nowPrice); // => 이번달 시가로 바꾸어야함
 
         if( stopLossPrice == null){
-            this.stopLossPrice = price * (stopLossPercent/100);
-            this.stopLossPrice = this.price - this.stopLossPrice;
+            this.stopLossPrice = dayOfMonthPrice * (stopLossPercent/100);
+            this.stopLossPrice = this.dayOfMonthPrice - this.stopLossPrice;
         }
         String stopLossPriceStr = formatter.format(this.stopLossPrice);
         
@@ -37,7 +39,13 @@ public class StopLossModel implements QuantModel{
             resultStr = "손절매";
         }
 
-        return "[손절매투자법 알림] \n"+ticker+"의 현재가는 "+nowPriceStr+"이고, 손절선 비율은 "+ stopLossPercent+"% 입니다. 이번달 손절매 타겟가는 "+stopLossPriceStr+"이고, "+ resultStr +"해야합니다. \n" +
-                "결과가 바뀐다면 알림을 드리겠습니다 ("+count+"/3) ";
+        return "[손절매투자법 알림] \n" +
+                "ticker 명       " +ticker+"\n" +
+                "이번달 시가      "+dayOfMonthPriceStr +"원\n" +
+                "손절선 비율      "+ stopLossPercent+"% \n" +
+                "손절매 타겟가     "+stopLossPriceStr+" 원\n" +
+                "현재가           "+ nowPriceStr+" 원\n" +
+                "결과            " + resultStr +"\n" +
+                "("+count+"/3) ";
     }
 }

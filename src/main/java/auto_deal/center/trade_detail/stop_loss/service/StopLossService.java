@@ -54,7 +54,8 @@ public class StopLossService implements TradeDetailService {
         // 한국어로 DB에 init되어있는 코인객체를 가져와 TB_Sto 에 넣어준다.
         StopLoss stopLoss = StopLoss.builder()
                                     .coinTicker(ticker)
-                                    .initPrice(stopLossModel.getPrice())
+                                    .initPrice(stopLossModel.getNowPrice())
+                                    .dayOfMonthPrice(stopLossModel.getDayOfMonthPrice())
                                     .stopLossPercent(stopLossModel.getStopLossPercent())
                                     .regdate(LocalDateTime.now())
                                     .resultCode(stopLossModel.getResult())

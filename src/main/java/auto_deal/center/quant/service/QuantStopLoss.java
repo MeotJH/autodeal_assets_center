@@ -14,6 +14,7 @@ import auto_deal.center.trade_detail.trend_follow.domain.TrendFollow;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class QuantStopLoss implements QuantType{
 
@@ -38,9 +40,10 @@ public class QuantStopLoss implements QuantType{
     public <T extends QuantModel> T get(String ticker, Class<T> cls) {
 
         Double stopLossPercent = getStopLossPercent(ticker);
+        Double dayOfMonthPrice = getDayOfMonthPrice(ticker);
         Double nowPrice = getNowPrice(ticker);
 
-        return cls.cast(getModel(ticker, stopLossPercent, nowPrice, getStopLossResult(stopLossPercent,nowPrice)));
+        return cls.cast(getModel(ticker, stopLossPercent, dayOfMonthPrice, nowPrice, getStopLossResult(stopLossPercent,nowPrice,dayOfMonthPrice)));
     }
 
     @Override
@@ -60,7 +63,7 @@ public class QuantStopLoss implements QuantType{
             noticeMessageModels.add( noticeMessageModelBuilder.quantModels(noticeModels).build() );
 
         }
-        return null;
+        return noticeMessageModels;
     }
 
     private Double getStopLossPercent(String ticker) {
@@ -75,8 +78,6 @@ public class QuantStopLoss implements QuantType{
     }
 
     private double getNowPrice(String ticker) {
-        JSONObject nowPrice = coinPrice
-                .getNowPrice(ticker);
         return Math.round(coinPrice
                 .getNowPrice(ticker)
                 .getJSONObject("data")
@@ -85,9 +86,13 @@ public class QuantStopLoss implements QuantType{
                 .getDouble("price"));
     }
 
-    private String getStopLossResult(Double stopLossPercent,Double nowPrice) {
-        Double stopLossPrice = nowPrice * (stopLossPercent/100);
-        stopLossPrice = nowPrice - stopLossPrice;
+    private double getDayOfMonthPrice(String ticker) {
+        return Math.round(sixMonthSection.getMonthFirstPrice(ticker));
+    }
+
+    private String getStopLossResult(Double stopLossPercent,Double nowPrice,Double dayOfMonthPrice) {
+        Double stopLossPrice = dayOfMonthPrice * (stopLossPercent/100);
+        stopLossPrice = dayOfMonthPrice - stopLossPrice;
 
         String result;
 
@@ -102,8 +107,15 @@ public class QuantStopLoss implements QuantType{
         return result;
     }
 
-    private StopLossModel getModel(String ticker, Double stopLossPercent, Double nowPrice, String result) {
-        return StopLossModel.builder().ticker(ticker).price(nowPrice).stopLossPercent(stopLossPercent).result(result).count(0).build();
+    private StopLossModel getModel(String ticker, Double stopLossPercent, Double dayOfMonthPrice, Double nowPrice,  String result) {
+        return StopLossModel.builder()
+                .ticker(ticker)
+                .dayOfMonthPrice(dayOfMonthPrice)
+                .nowPrice(nowPrice)
+                .stopLossPercent(stopLossPercent)
+                .result(result)
+                .count(0)
+                .build();
     }
 
     private List<QuantModel> addNoticeModels(Quant each) {
@@ -112,7 +124,7 @@ public class QuantStopLoss implements QuantType{
 
             StopLossModel model = getStopLossModel(inEach);
             // 손절매 가격이 현재가격보다 높고 알림을 3번이하로 했다면 알려야한다.
-            if( model.getStopLossPrice() > model.getPrice() && (inEach.getCount() < 3) ){
+            if( model.getStopLossPrice() > model.getDayOfMonthPrice() && (inEach.getCount() < 3) ){
                 quantModels.add(model);
                 saveStopLossCnt(inEach);
             }
@@ -131,7 +143,8 @@ public class QuantStopLoss implements QuantType{
 
         StopLossModel model = StopLossModel.builder()
                 .ticker(coinTicker)
-                .price(nowPrice)
+                .dayOfMonthPrice(inEach.getDayOfMonthPrice())
+                .nowPrice(nowPrice)
                 .stopLossPercent(stopLossPercent)
                 .stopLossPrice(targetPrice)
                 .result("ST01")

@@ -41,11 +41,21 @@ public class CoinPriceSixMonthSection implements SixMonthSection {
 
     }
 
-    private Map<String, Double> parseDatasPercentByMap(JSONObject jsonObject) {
-        JSONArray datas = jsonObject.getJSONArray("data");
-        HashMap<String, ArrayList<JSONArray>> targetMonth = parseEveryDataToTartgetMonth(datas);
-        String[] monthKeyArr = getKeysByArr(targetMonth);
-        return calculatePriceToPercent(targetMonth, monthKeyArr);
+    @Override
+    public Double getMonthFirstPrice(String ticker){
+        Double dayOfMonthStart = 0.0;
+        try {
+            JSONObject jsonObject = getBeforeException(ticker);
+            JSONArray data = jsonObject.getJSONArray("data");
+
+            int dayOfMonthIdx = data.length() - LocalDateTime.now().getDayOfMonth();
+            JSONArray dayOfMonthData = data.getJSONArray(dayOfMonthIdx);
+            dayOfMonthStart = dayOfMonthData.getDouble(1);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }finally {
+            return dayOfMonthStart;
+        }
     }
 
     private JSONObject getBeforeException(String ticker) throws IOException {
@@ -62,6 +72,13 @@ public class CoinPriceSixMonthSection implements SixMonthSection {
         return new JSONObject( client.newCall(request).execute().body().string() );
     }
 
+    private Map<String, Double> parseDatasPercentByMap(JSONObject jsonObject) {
+        JSONArray datas = jsonObject.getJSONArray("data");
+        HashMap<String, ArrayList<JSONArray>> targetMonth = parseEveryDataToTartgetMonth(datas);
+        String[] monthKeyArr = getKeysByArr(targetMonth);
+        return calculatePriceToPercent(targetMonth, monthKeyArr);
+    }
+
     @NotNull
     private HashMap<String, ArrayList<JSONArray>> parseEveryDataToTartgetMonth(JSONArray datas) {
         HashMap<String, ArrayList<JSONArray>> map = new HashMap<>();
@@ -72,7 +89,7 @@ public class CoinPriceSixMonthSection implements SixMonthSection {
             Integer year = localDateTime.getYear();
             Integer nowYear = LocalDateTime.now().getYear();
 
-            if( nowYear.equals(year) || nowYear.equals(year+1)){
+            if( nowYear.equals(year) || nowYear.equals(year+1) ){
                 Integer dayOfMonth = localDateTime.getMonthValue();
                 String yearMonth = year + Integer.toString(dayOfMonth);
                 if(map.containsKey(yearMonth)){

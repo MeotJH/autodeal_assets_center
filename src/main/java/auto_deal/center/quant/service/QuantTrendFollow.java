@@ -159,6 +159,8 @@ public class QuantTrendFollow implements QuantType {
         return quantModels;
         // TODO 현재 만든 메소드 테스트케이스 만들기
         // TODO 1달에 1번 initPrice 초기화 및 cnt 초기화 작성해야함
+
+        // 39,258,000.0
     }
 
     private void saveTrendFollow(TrendFollow inEach, Boolean isBuy) {
